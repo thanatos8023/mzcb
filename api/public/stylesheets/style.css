@@ -1,0 +1,25 @@
+
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.input_btn {
+  background-color: #e7e7e7;
+  color: black;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border: none;
+} /* Gray */ 
+
+.divListGroup { width: 100%;  text-align: center;}
+
+.divChild {  height: 100px; display: inline-block; vertical-align: middle; }
+

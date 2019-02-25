@@ -1,0 +1,93 @@
+doctype html
+html
+	head
+		meta(charset='utf-8')
+		title User utterance and response viewer
+		style table, th, td {border: 1px solid black;}
+		script.
+			function setIntentionListByDomain() {
+				var domain = document.getElementById("selectedDomain").value;
+				var intentionList = [];
+				for (var i = 0; i < wholeList.length; i++) {
+				
+				}
+			}
+	body
+		h1 Chatbot Simulator
+		div
+			ul
+				each domain in domList
+					li
+						a(href='/mode/#{domain}')= domain
+						if nowDomain==domain
+							ul
+								each intention in intList
+									li
+										a(href='/mode/#{domain}/#{intention}')= intention
+										if nowIntention==intention
+											ul
+												each status in stList
+													li
+														a(href='/mode/#{domain}/#{intention}/#{status}')= status
+		div
+			form(action='/delete/#{nowDomain}/#{nowIntention}/#{nowStatus}' method='post' id='deleteform')
+				div
+					h2 Manage Input
+				div
+					table
+						if inputList
+							each row in inputList
+								tr
+									td
+										button(name="uinput" type="submit" form="deleteform" value=row.user_input) 삭제
+									td= row.user_input
+		div
+			form(action='/input/#{nowDomain}/#{nowIntention}/#{nowStatus}' method='post')
+				tr
+					td
+						label User Input
+						input(type="text" name="newUserInput")
+					td
+						input(type="submit" value="추가")
+		div
+			form(action='/updateres/#{nowDomain}/#{nowIntention}/#{nowStatus}' method='post')
+				div
+					h2 Manage Response
+					input(type='submit' value='수정')
+				div
+					table
+						th
+							td Type
+							td Text
+							td Object 1
+							td Object 2
+						tr
+							td
+							td
+								textarea(name="newtype" rows="10")= resType
+							td
+								textarea(name="newtext" rows="10")= resText
+							td
+								textarea(name="newobj1" rows="10")= resObj1
+							td
+								textarea(name="newobj2" rows="10")= resObj2
+		div
+			form(action='/updaterule/#{nowDomain}/#{nowIntention}/#{nowStatus}' method='post')
+				div
+					h2 Manage Rule
+					input(type='submit' value='수정')
+				div
+					table
+						th
+							td Morph 1
+							td Morph 2
+							td Morph 3
+						if ruleList
+							tr
+								td
+								td
+									textarea(name="newmorph1" rows="5")= ruleList.morph1
+								td
+									textarea(name="newmorph2" rows="5")= ruleList.morph2
+								td
+									textarea(name="newmorph3" rows="5")= ruleList.morph3

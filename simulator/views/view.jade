@@ -1,0 +1,46 @@
+doctype html
+html
+	head
+		meta(charset='utf-8')
+		title User utterance and response viewer
+		link(href="https://fonts.googleapis.com/css?family=Nanum+Gothic|Raleway" rel="stylesheet")
+		link(rel="stylesheet" href="css/reset.css")
+		link(rel="stylesheet" href="css/style.css")
+	body
+		div(id="wrap" class="main")
+			div(class="_title")
+				div(class="_inner")
+					h1 Chatbot Simulator
+			div(class="_contents mt50")
+				div(class="_inner")
+					div(class="table-top")
+						div(class="_left")
+							h2 Monitoring
+								i(class="icon-monitor")
+						form(action='/deleteview' method='post')
+							div(class="_right")
+								button(type='submit' class="button navy") 초기화
+					div(class="basic-table")
+						table
+							caption Chatbot Simulator monitoring
+							thead
+								tr
+									th User ID
+									th Car Type
+									th Bluelink Status
+									th Intention
+									th User Input
+									th Response Text
+							tbody
+								if idxs
+									-	for (var i = 0; i < ids.length; i++) {
+										tr
+											td= ids[i]
+											td= types[i]
+											td= status[i]
+											td= intentions[i]
+											td= inputs[i]
+											td= responses[i]
+									-	}
+		script(src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js")
+		script(src="js/func.js")

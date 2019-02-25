@@ -1,0 +1,58 @@
+doctype html
+html
+	head
+		meta(charset='utf-8')
+		title User utterance and response viewer
+		link(href="https://fonts.googleapis.com/css?family=Nanum+Gothic|Raleway" rel="stylesheet")
+		link(rel="stylesheet" href="/css/reset.css")
+		link(rel="stylesheet" href="/css/style.css")
+	body
+		div#wrap
+			div.wrap-left
+				div._title
+					h1 Chatbot Simulator
+				div.sub
+					ul
+						each domain in domList
+							li
+							a(href='/rule/#{domain}')= domain
+							if nowDomain==domain
+								ul
+									each intention in intList
+										li
+											a(href='/rule/#{domain}/#{intention}')= intention
+											if nowIntention==intention
+												ul
+													each status in stList
+														li
+															a(href='/rule/#{domain}/#{intention}/#{status}')= status
+			div.wrap-right
+				div.gnb
+					a(href="/mode/#{nowDomain}/#{nowIntention}/#{nowStatus}") Manage Input
+					a(href="/response/#{nowDomain}/#{nowIntention}/#{nowStatus}") Manage Response
+					a(href="/rule/#{nowDomain}/#{nowIntention}/#{nowStatus}" class="on") Manage Rule
+				form(action='/updaterule/#{nowDomain}/#{nowIntention}/#{nowStatus}' method='post' id='updateruleform')
+					div._contents
+						div.box
+							div(class="_top text-right")
+								button(type="submit" class="button mint" form="updateruleform") 수정
+									i.icon-modify
+									
+							div(class="basic-table type02")
+								table
+									caption manage Response table
+									thead
+										tr
+											th(scope="col") Morph 1
+											th(scope="col") Morph 2
+											th(scope="col") Morph 3
+									tbody
+										tr
+											td
+												textarea(name="newmorph1", id="newmorph1")= morph1
+											td
+												textarea(name="newmorph2", id="newmorph2")= morph2
+											td
+												textarea(name="newmorph3", id="newmorph3")= morph3
+		script(src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js")
+		script(src="js/func.js")
