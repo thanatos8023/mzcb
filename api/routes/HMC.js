@@ -7,14 +7,15 @@ var fs = require('fs');
 var util = require('util');
 var dateUtils = require("date-utils");
 var oracledb = require("oracledb");
+var dbConfig = require("./dbConfig.js");
 oracledb.autoCommit = true;
 
 var connection;
 // 오라클 접속
 oracledb.getConnection({
-  user:"mzen",
-  password:"mediazen",
-  connectString:"192.168.123.31:1521/xe"
+  user            : dbConfig.user,
+  password        : dbConfig.password,
+  connectString   : dbConfig.connectString
 }, function (err, con) {
   if (err) {
     console.log ("Oracle DB connection Error!!", err);
