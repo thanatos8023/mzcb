@@ -4,7 +4,7 @@
 import mecab
 import re
 import json
-import pymysql
+import cx_Oracle
 
 class Model(object):
     def __init__(self, req):
@@ -92,11 +92,10 @@ class Model(object):
     ## 미완성
     def make_response(self):
         # DB 연결
-        connection = pymysql.connect(
-            host='127.0.0.1',
-            user='hmc',
-            password='aleldjwps',
-            db='hmc_chatbot',
+        connection = cx_Oracle.connect(
+            'mzen',
+            'mediazen',
+            '192.168.123.31/xe',
         )
 
         with connection.cursor() as user_cursor:
@@ -152,50 +151,18 @@ class Model(object):
     # 'Pin': PIN 입력 후 대화 반응 (삭제 예정)
     def get_DM_from_DB(self):
         # DB 연결
-        connection = pymysql.connect(
-            host='127.0.0.1',
-            user='hmc',
-            password='aleldjwps',
-            db='hmc_chatbot',
+        connection = cx_Oracle.connect(
+            'mzen',
+            'mediazen',
+            '192.168.123.31/xe',
         )
 
         with connection.cursor() as cursor:
-            ## Buttons 채우기
-            sql = 'SELECT * FROM tb_response_text WHERE intention="Button"'
-            cursor.execute(sql)
-
-            # key: button label
-            # value: response form
-            buttons = {}
-            for row in cursor:
-                # setting response form
-                # response form example
-                # {
-                #   "type": ..,
-                #   "text": ..,
-                #   "buttons": ..,
-                #   ..
-                # }
-                buttons[row[2]] = self.get_responseForm(row)
-
-            ## Buttons 완성: 변수명 buttons
-
-            ## Errors 채우기
-            sql = 'SELECT * FROM tb_response_text WHERE intention="Error"'
-            cursor.execute(sql)
-
-            # key: error number (string)
-            # value: response form
-            errors = {}
-            for row in cursor:
-                errors[row[2]] = self.get_responseForm(row)
-
-            ## Errors 완성: 변수명 errors
 
             ## Intentions 채우기
             intentions = {}
             # 의도 목록이 필요함
-            sql = 'SELECT * FROM tb_user_input'
+            sql = 'SELECT * FROM MZCB_INPUTS'
             cursor.execute(sql)
             intention_list = []
             for row in cursor:
@@ -206,7 +173,7 @@ class Model(object):
             # 의도 목록을 기준으로 Rule과 Response를 정리함
             for intention in intention_set:
                 # 규칙 가져오기
-                rule_sql = 'SELECT * FROM tb_rule WHERE intention=%s'
+                rule_sql = 'SELECT * FROM MZCB_RULES WHERE INTENTION=%s'
                 nrows = cursor.execute(rule_sql, (intention))
                 if nrows == 0:
                     continue
@@ -226,7 +193,7 @@ class Model(object):
                 # 규칙 가져오기 끝: 변수명 rule_temp
 
                 # 응답 가져오기
-                res_sql = 'SELECT * FROM tb_response_text WHERE intention=%s'
+                res_sql = 'SELECT * FROM MZCB_RESPONSE WHERE INTENTION=%s'
                 cursor.execute(res_sql, (intention))
 
                 res_temp = {}
@@ -250,8 +217,6 @@ class Model(object):
 
         # 결과
         dm = {
-            'Buttons': buttons,
-            'Errors': errors,
             'Intentions': intentions,
         }
 
@@ -305,31 +270,25 @@ class Model(object):
     # intention 반환 함수
     # intention 탐색 순서: 버튼인가? -> 코퍼스에 등록된 발화인가? -> Rule에 맞는 발화인가?
     def __get_intention__(self):
-        # 버튼일 경우,
-        # 바로 'Buttons'를 반환하고 종료
-        if self.utt in self.dm['Buttons'].keys():
-            return 'Buttons'
-        else:
-            # 버튼이 아닐 경우,
-            # 먼저 코퍼스 탐색함
-            # 코퍼스에 있는 발화일 경우, 코퍼스 이름(intention)이 반환됨
-            # 없는 발화일 경우, False 가 반환됨
-            intention = self.__get_intention_from_corpus__()
+        # 먼저 코퍼스 탐색함
+        # 코퍼스에 있는 발화일 경우, 코퍼스 이름(intention)이 반환됨
+        # 없는 발화일 경우, False 가 반환됨
+        intention = self.__get_intention_from_corpus__()
 
-            # 코퍼스에 해당 발화가 있을 경우,
-            # intention 을 반환하고 바로 종료
+        # 코퍼스에 해당 발화가 있을 경우,
+        # intention 을 반환하고 바로 종료
+        if intention:
+            return intention
+        # 코퍼스에 해당 발화가 없을 경우,
+        # Rule 을 이용해서 intention 을 추측함.
+        # 추측도 불가능한 발화의 경우, Fail 을 반환
+        else:
+            intention = self.__get_intention_from_lm__()
+
             if intention:
                 return intention
-            # 코퍼스에 해당 발화가 없을 경우,
-            # Rule 을 이용해서 intention 을 추측함.
-            # 추측도 불가능한 발화의 경우, Fail 을 반환
             else:
-                intention = self.__get_intention_from_lm__()
-
-                if intention:
-                    return intention
-                else:
-                    return "Fail"
+                return "Fail"
 
     # Rule 과 비교하여 intention 을 찾는 함수
     def __get_intention_from_lm__(self):
@@ -355,15 +314,14 @@ class Model(object):
     # 코퍼스에서 입력 발화를 검색하는 함수
     def __get_intention_from_corpus__(self):
         # DB 연결
-        connection = pymysql.connect(
-            host='127.0.0.1',
-            user='hmc',
-            password='aleldjwps',
-            db='hmc_chatbot',
+        connection = cx_Oracle.connect(
+            'mzen',
+            'mediazen',
+            '192.168.123.31/xe',
         )
 
         with connection.cursor() as cur:
-            sql = 'SELECT * FROM tb_user_input'
+            sql = 'SELECT * FROM MZCB_INPUTS'
             cur.execute(sql)
 
             for row in cur:

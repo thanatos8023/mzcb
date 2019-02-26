@@ -78,7 +78,7 @@ router.post('/message', function (req, res, next) {
     console.log("user command : " + object.content);
     console.log("user intention: " + intention);
 
-    var resSQL = "SELECT * FROM `tb_response_text` WHERE `intention` = ?"
+    var resSQL = "SELECT * FROM `MZCB_RESPONSE` WHERE `INTENTION` = ?"
     connection.execute(resSQL, intention, function (resError, resResult, body) {
       if (resError) {
         console.error("SERVER :: DB ERROR :: tb_response_text connection error");
@@ -86,7 +86,6 @@ router.post('/message', function (req, res, next) {
         res.end();
         return resError
       }
-
 
       res.json({
         "type": resResult[0].response_type,
