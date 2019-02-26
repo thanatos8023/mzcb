@@ -3,10 +3,25 @@ var router = express.Router();
 var request = require('request');
 var bodyParser = require('body-parser');
 var querystring = require('querystring');
-var uuid = require('uuid');
 var fs = require('fs');
 var util = require('util');
 var dateUtils = require("date-utils");
+var oracledb = require("oracledb");
+oracledb.autoCommit = true;
+
+var connection;
+// 오라클 접속
+oracledb.getConnection({
+  user:"mzen",
+  password:"mediazen",
+  connectString:"localhost/xe"
+}, function (err, con) {
+  if (err) {
+    console.log ("Oracle DB connection Error!!", err)
+  }
+
+  connection = con;
+});
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
