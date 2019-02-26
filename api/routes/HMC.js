@@ -14,12 +14,13 @@ var connection;
 oracledb.getConnection({
   user:"mzen",
   password:"mediazen",
-  connectString:"localhost/xe"
+  connectString:"192.168.123.31:1521/xe"
 }, function (err, con) {
   if (err) {
-    console.log ("Oracle DB connection Error!!", err)
+    console.log ("Oracle DB connection Error!!", err);
+  } else {
+    console.log ("Oracle DB connection sucessed");  
   }
-
   connection = con;
 });
 
