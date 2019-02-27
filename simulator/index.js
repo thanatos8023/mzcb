@@ -2,18 +2,25 @@
 const express = require('express');
 const app = express();
 
-// MySQL setting
-// Definition
-const mysql = require('mysql');
-const conn_db = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'hmc',
-  password : 'aleldjwps',
-  database : 'hmc_chatbot'
+var oracledb = require("oracledb");
+var dbConfig = require("./dbConfig.js");
+oracledb.autoCommit = true;
+
+var connection;
+// 오라클 접속
+oracledb.getConnection({
+  user            : dbConfig.user,
+  password        : dbConfig.password,
+  connectString   : dbConfig.connectString
+}, function (err, con) {
+  if (err) {
+    console.log ("Oracle DB connection Error!!", err);
+  } else {
+    console.log ("Oracle DB connection sucessed");  
+  }
+  connection = con;
 });
 
-// Connection
-conn_db.connect();
 
 // BodyParser Loading
 const bodyParser = require('body-parser');
@@ -34,7 +41,7 @@ app.listen(23705, function(){
 // Monitoring page
 app.get('/view', function(req, res) {
 	var sql = "SELECT * FROM tb_monitoring"
-	conn_db.query(sql, function(err, monit_info, body) {
+	connection.query(sql, function(err, monit_info, body) {
 		if (err) {
 			console.error("SERVER :: DB ERROR :: tb_monitoring selection error!");
 			console.error(err);
@@ -45,40 +52,13 @@ app.get('/view', function(req, res) {
 		console.log("rows: ", monit_info.length);
 		//console.log("sample: ", monit_info[0]);
 		
-		var ids = [];
-		var types = [];
-		var status = [];
-		var intentions = [];
-		var inputs = [];
-		var responses = [];
-		var idxs = [];
-		for (var i = 0; i < monit_info.length; i++) {
-			ids.push(monit_info[i].user_id);
-			types.push(monit_info[i].car_type);
-			status.push(monit_info[i].bluelink_status);
-			intentions.push(monit_info[i].intention);
-			inputs.push(monit_info[i].user_input);
-			responses.push(monit_info[i].response_text);
-			idxs.push(i);
-		}
-
-		//console.log(status);
-
-		res.render('view', {
-			ids: ids,
-			types: types,
-			status: status,
-			intentions: intentions,
-			inputs: inputs,
-			responses: responses,
-			idxs: idxs
-		});
+		res.send("이 기능은 추후에 구현될 예정입니다.");
 	});
 });
 
 app.post('/deleteview', function (req, res) {
 	var sql = "DELETE FROM tb_monitoring";
-	conn_db.query(sql, function (delErr, delResult, delField) {
+	connection.query(sql, function (delErr, delResult, delField) {
 		if (delErr) {
 			console.error("SERVER :: DB Connection : tb_monitoring deletion connection error");
 			console.error(delErr);
@@ -96,13 +76,11 @@ app.post('/deleteview', function (req, res) {
 app.get('/mode', function (req, res) {
 	console.log('%%% Server log: /mode ROUTER');
 
-	var domain = req.params.domain;
 	var intention = req.params.intention;
-	var status = req.params.status;
 
 	// 기본적으로 도메인 목록은 무조건 전시해야함 
-	var sql = "SELECT * FROM tb_response_text";
-	conn_db.query(sql, function (allError, allResult, allBody) {
+	var sql = "SELECT * FROM MZCB_RESPONSE";
+	connection.execute(sql, function (allError, allResult, allBody) {
 		if (allError) { // DB 불러오기 에러
 			console.error("SERVER :: DB Connection : All Database reading connection error");
 			console.error(allError);
@@ -111,6 +89,9 @@ app.get('/mode', function (req, res) {
 		}
 
 		var domainList = [];
+		for 
+
+
 		for (var i = 0; i < allResult.length; i++) {
 			if (domainList.indexOf(allResult[i].domain) < 0) {
 				domainList.push(allResult[i].domain);
@@ -127,7 +108,7 @@ app.get('/mode/:domain', function (req, res) {
 
 	// 기본적으로 도메인 목록은 무조건 전시해야함 
 	var sql = "SELECT * FROM tb_response_text";
-	conn_db.query(sql, function (allError, allResult, allBody) {
+	connection.query(sql, function (allError, allResult, allBody) {
 		if (allError) { // DB 불러오기 에러
 			console.error("SERVER :: DB Connection : All Database reading connection error");
 			console.error(allError);
@@ -168,7 +149,7 @@ app.get('/mode/:domain/:intention', function (req, res) {
 
 	// 기본적으로 도메인 목록은 무조건 전시해야함 
 	var sql = "SELECT * FROM tb_response_text";
-	conn_db.query(sql, function (allError, allResult, allBody) {
+	connection.query(sql, function (allError, allResult, allBody) {
 		if (allError) { // DB 불러오기 에러
 			console.error("SERVER :: DB Connection : All Database reading connection error");
 			console.error(allError);
@@ -217,7 +198,7 @@ app.get('/mode/:domain/:intention/:status', function(req, res) {
 
 	// 기본적으로 도메인 목록은 무조건 전시해야함 
 	var sql = "SELECT * FROM tb_response_text";
-	conn_db.query(sql, function (allError, allResult, allBody) {
+	connection.query(sql, function (allError, allResult, allBody) {
 		if (allError) { // DB 불러오기 에러
 			console.error("SERVER :: DB Connection : All Database reading connection error");
 			console.error(allError);
@@ -249,7 +230,7 @@ app.get('/mode/:domain/:intention/:status', function(req, res) {
 
 		// 정보 출력
 		var inSQL = "SELECT * FROM tb_user_input WHERE domain = ? AND intention = ?";
-		conn_db.query(inSQL, [domain, intention], function (inError, inResult, inBody) {
+		connection.query(inSQL, [domain, intention], function (inError, inResult, inBody) {
 			if (inError) {
 				console.error("SERVER :: DB Connection : User Input Database reading connection error");
 				console.error(inError);
@@ -258,7 +239,7 @@ app.get('/mode/:domain/:intention/:status', function(req, res) {
 			}
 
 			var ruleSQL = "SELECT * FROM tb_rule WHERE domain = ? AND intention = ?";
-			conn_db.query(ruleSQL, [domain, intention], function (ruleError, ruleResult, ruleBody) {
+			connection.query(ruleSQL, [domain, intention], function (ruleError, ruleResult, ruleBody) {
 				if (ruleError) {
 					console.error("SERVER :: DB Connection : Rule Database reading connection error");
 					console.error(ruleError);
@@ -295,7 +276,7 @@ app.get('/response', function (req, res) {
 
 	// 기본적으로 도메인 목록은 무조건 전시해야함 
 	var sql = "SELECT * FROM tb_response_text";
-	conn_db.query(sql, function (allError, allResult, allBody) {
+	connection.query(sql, function (allError, allResult, allBody) {
 		if (allError) { // DB 불러오기 에러
 			console.error("SERVER :: DB Connection : All Database reading connection error");
 			console.error(allError);
@@ -320,7 +301,7 @@ app.get('/response/:domain', function (req, res) {
 
 	// 기본적으로 도메인 목록은 무조건 전시해야함 
 	var sql = "SELECT * FROM tb_response_text";
-	conn_db.query(sql, function (allError, allResult, allBody) {
+	connection.query(sql, function (allError, allResult, allBody) {
 		if (allError) { // DB 불러오기 에러
 			console.error("SERVER :: DB Connection : All Database reading connection error");
 			console.error(allError);
@@ -361,7 +342,7 @@ app.get('/response/:domain/:intention', function (req, res) {
 
 	// 기본적으로 도메인 목록은 무조건 전시해야함 
 	var sql = "SELECT * FROM tb_response_text";
-	conn_db.query(sql, function (allError, allResult, allBody) {
+	connection.query(sql, function (allError, allResult, allBody) {
 		if (allError) { // DB 불러오기 에러
 			console.error("SERVER :: DB Connection : All Database reading connection error");
 			console.error(allError);
@@ -410,7 +391,7 @@ app.get('/response/:domain/:intention/:status', function(req, res) {
 
 	// 기본적으로 도메인 목록은 무조건 전시해야함 
 	var sql = "SELECT * FROM tb_response_text";
-	conn_db.query(sql, function (allError, allResult, allBody) {
+	connection.query(sql, function (allError, allResult, allBody) {
 		if (allError) { // DB 불러오기 에러
 			console.error("SERVER :: DB Connection : All Database reading connection error");
 			console.error(allError);
@@ -466,7 +447,7 @@ app.get('/rule', function (req, res) {
 
 	// 기본적으로 도메인 목록은 무조건 전시해야함 
 	var sql = "SELECT * FROM tb_response_text";
-	conn_db.query(sql, function (allError, allResult, allBody) {
+	connection.query(sql, function (allError, allResult, allBody) {
 		if (allError) { // DB 불러오기 에러
 			console.error("SERVER :: DB Connection : All Database reading connection error");
 			console.error(allError);
@@ -491,7 +472,7 @@ app.get('/rule/:domain', function (req, res) {
 
 	// 기본적으로 도메인 목록은 무조건 전시해야함 
 	var sql = "SELECT * FROM tb_response_text";
-	conn_db.query(sql, function (allError, allResult, allBody) {
+	connection.query(sql, function (allError, allResult, allBody) {
 		if (allError) { // DB 불러오기 에러
 			console.error("SERVER :: DB Connection : All Database reading connection error");
 			console.error(allError);
@@ -532,7 +513,7 @@ app.get('/rule/:domain/:intention', function (req, res) {
 
 	// 기본적으로 도메인 목록은 무조건 전시해야함 
 	var sql = "SELECT * FROM tb_response_text";
-	conn_db.query(sql, function (allError, allResult, allBody) {
+	connection.query(sql, function (allError, allResult, allBody) {
 		if (allError) { // DB 불러오기 에러
 			console.error("SERVER :: DB Connection : All Database reading connection error");
 			console.error(allError);
@@ -586,7 +567,7 @@ app.get('/rule/:domain/:intention/:status', function(req, res) {
 
 	// 기본적으로 도메인 목록은 무조건 전시해야함 
 	var sql = "SELECT * FROM tb_response_text";
-	conn_db.query(sql, function (allError, allResult, allBody) {
+	connection.query(sql, function (allError, allResult, allBody) {
 		if (allError) { // DB 불러오기 에러
 			console.error("SERVER :: DB Connection : All Database reading connection error");
 			console.error(allError);
@@ -611,7 +592,7 @@ app.get('/rule/:domain/:intention/:status', function(req, res) {
 
 		// 정보 출력
 		ruleSQL = "select * from TB_RULE where domain = ? and intention = ?";
-		conn_db.query(ruleSQL, [domain, intention], function (ruleErr, ruleResult, ruleNext) {
+		connection.query(ruleSQL, [domain, intention], function (ruleErr, ruleResult, ruleNext) {
 			if (ruleErr) { // DB 불러오기 에러
 				console.error("SERVER :: DB Connection : Rule Database reading connection error");
 				console.error(ruleErr);
@@ -646,7 +627,7 @@ app.post('/input/:domain/:intention/:status', function(req, res) {
 	console.log("New Input: " + newUserInput);
 
 	var sql = 'INSERT INTO tb_user_input (domain, intention, user_input) VALUES(?, ?, ?)';
-	conn_db.query(sql, [domain, intention, newUserInput], function(inErr, inResult, inFields){
+	connection.query(sql, [domain, intention, newUserInput], function(inErr, inResult, inFields){
 		if (inErr) {
 			console.error("SERVER :: DB CONNECTION ERROR :: insertion error");
 			console.error(inErr);
@@ -673,7 +654,7 @@ app.post('/delete/:domain/:intention/:status', function(req, res) {
 
 	if (typeof(checked_utt) === typeof('string')) {
 		var sql = "DELETE FROM tb_user_input WHERE user_input=?";
-		conn_db.query(sql, [checked_utt], function(err, result, body) {
+		connection.query(sql, [checked_utt], function(err, result, body) {
 			if (err) {
 				console.error("SERVER :: DB CONNECTION ERROR :: deletion error");
 				console.error(err);
@@ -692,7 +673,7 @@ app.post('/delete/:domain/:intention/:status', function(req, res) {
 		utts = `(${utts})`;
 
 		var sql = "DELETE FROM tb_user_input WHERE user_input in " + utts;
-		conn_db.query(sql, function(err, result, body) {
+		connection.query(sql, function(err, result, body) {
 			if (err) {
 				console.error("SERVER :: DB CONNECTION ERROR :: deletion error");
 				console.error(err);
@@ -726,7 +707,7 @@ app.post('/updateres/:domain/:intention/:status', function (req, res) {
 	console.log("New Object2: " + newObj2);
 
 	var udtSQL = "UPDATE tb_response_text SET response_type = ?, response_text = ?, response_object1 = ?, response_object2 = ? WHERE domain = ? AND intention = ? AND chatbot_status = ?";
-	conn_db.query(udtSQL, [newType, newText, newObj1, newObj2, domain, intention, status], function (udtErr, udtResult, udtField) {
+	connection.query(udtSQL, [newType, newText, newObj1, newObj2, domain, intention, status], function (udtErr, udtResult, udtField) {
 		if (udtErr) {
 			console.error("SERVER :: DB CONNECTION ERROR :: update error");
 			console.error(udtErr);
@@ -757,7 +738,7 @@ app.post('/updaterule/:domain/:intention/:status', function (req, res) {
 	console.log("New Morph 3: " + newMorph3);
 
 	var udtSQL = "UPDATE tb_rule SET  morph1 = ?, morph2 = ?, morph3 = ? WHERE domain = ? AND intention = ?"
-	conn_db.query(udtSQL, [newMorph1, newMorph2, newMorph3, domain, intention], function (udtErr, udtResult, udtField) {
+	connection.query(udtSQL, [newMorph1, newMorph2, newMorph3, domain, intention], function (udtErr, udtResult, udtField) {
 		if (udtErr) {
 			console.error("SERVER :: DB CONNECTION ERROR :: update error");
 			console.error(udtErr);
