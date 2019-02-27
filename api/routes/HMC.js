@@ -87,6 +87,8 @@ router.post('/message', function (req, res, next) {
         return resError
       }
 
+      console.log(resResult);
+
       res.json({
         "type": "simpleText",
         "text": resResult[0].RES_TEXT,
