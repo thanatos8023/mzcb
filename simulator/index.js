@@ -113,6 +113,7 @@ app.get('/mode/:intention', function (req, res) {
 		console.log("SERVER :: Number of Intention :: " + intentionList.length);
 
 		// 정보 출력
+		console.log("List of utterances: ", inList);
 
 		res.render('input', {
 			nowIntention: intention,
