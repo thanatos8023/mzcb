@@ -16,10 +16,10 @@ html
 						each intention in intList
 							if nowIntention==intention
 								li.active
-									a(href='/mode/#{intention}')= intention
+									a(href='/rule/#{intention}')= intention
 							else
 								li
-									a(href='/mode/#{intention}')= intention
+									a(href='/rule/#{intention}')= intention
 			div.wrap-right
 				div.gnb
 					a(href="/mode/#{nowIntention}") Manage Input

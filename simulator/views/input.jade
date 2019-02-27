@@ -39,9 +39,9 @@ html
 							div.user-list
 								if inputList
 									ul
-									each row in inputList
+									each utt in inputList
 										li
-											input(type="checkbox" name="checked_utt" value=row.user_input)
-											label(for=row.user_input)= row.user_input
+											input(type="checkbox" name="checked_utt" value=utt)
+											label(for=row.user_input)= utt
 		script(src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js")
 		script(src="js/func.js")
