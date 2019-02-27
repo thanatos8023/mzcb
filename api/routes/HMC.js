@@ -78,7 +78,7 @@ router.post('/message', function (req, res, next) {
     console.log("user command : " + object.content);
     console.log("user intention: " + intention);
 
-    var resSQL = "select * from `MZCB_RESPONSE` where `INTENTION` = :inte"
+    var resSQL = "select * from MZCB_RESPONSE where INTENTION = :inte"
     connection.execute(resSQL, {inte: intention}, function (resError, resResult, body) {
       if (resError) {
         console.error("SERVER :: DB ERROR :: MZCB_RESPONSE connection error");
