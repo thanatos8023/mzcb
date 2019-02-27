@@ -199,7 +199,7 @@ class Model(object):
                 # response_object1  :   5
                 # response_object2  :   6
                 for inte, res in cursor:
-                    res_temp["200"] = self.get_responseForm(("FAQ", inte, '200', 'simpleText', res, None, None))
+                    res_temp["200"] = self.get_responseForm(("FAQ", inte, '200', 'simpleText', res, 'NaN', 'NaN'))
 
                 # 응답 가져오기 끝: 변수명 res_temp
 
@@ -325,9 +325,9 @@ class Model(object):
             sql = 'SELECT * FROM MZCB_INPUTS'
             cur.execute(sql)
 
-            for row in cur:
-                if self.utt == row[2]:
-                    return row[1]
+            for inte, utt in cur:
+                if self.utt == utt:
+                    return inte
 
         return None
 
