@@ -119,7 +119,7 @@ class Model(object):
                 result.append(tuple(morph_tag.split('/')))
             return set(result)
         else:
-            return "NaN"
+            return set()
 
     # DB 에서 DM 정보를 불러오는 함수
     ### DB 에 필요한 필드
