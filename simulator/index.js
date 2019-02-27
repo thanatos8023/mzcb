@@ -101,14 +101,11 @@ app.get('/mode/:intention', function (req, res) {
 		var intentionList = [];
 		var inList = [];
 		for (var i = 0; i < allResult.rows.length; i++) {
-			console.log(allResult.rows[i]);
-			console.log(allResult.rows[i][1]);
-
 			if (intentionList.indexOf(allResult.rows[i][0]) < 0) {
 				intentionList.push(allResult.rows[i][0])
 			}
 
-			if (allResult.rows[i][0] === intention) {
+			if (allResult.rows[i][0] == intention) {
 				inList.push(allResult.rows[i][1]);
 			}
 		}
@@ -220,11 +217,6 @@ app.get('/rule/:intention', function(req, res) {
 	console.log('%%% Server log: /rule ROUTER');
 
 	var intention = req.params.intention;
-
-	if (domain === "System") {
-		res.redirect('/rule');
-		return 200;
-	}
 
 	// 기본적으로 도메인 목록은 무조건 전시해야함 
 	var sql = "SELECT * FROM MZCB_INPUTS";
