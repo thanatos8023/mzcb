@@ -248,9 +248,9 @@ app.get('/rule/:intention', function(req, res) {
 			res.render('rule', {
 				intList: intentionList,
 				nowIntention: intention,
-				morph1: ruleResult[0].rows[0][1],
-				morph2: ruleResult[0].rows[0][2],
-				morph3: ruleResult[0].rows[0][3]
+				morph1: ruleResult.rows[0][1],
+				morph2: ruleResult.rows[0][2],
+				morph3: ruleResult.rows[0][3]
 			});
 		});
 	});
