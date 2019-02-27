@@ -311,7 +311,7 @@ app.post('/delete/:intention', function(req, res) {
 		utts = `(${utts})`;
 
 		var sql = "DELETE FROM tb_user_input WHERE user_input in " + utts;
-		connection.query(sql, function(err, result, body) {
+		connection.execute(sql, function(err, result, body) {
 			if (err) {
 				console.error("SERVER :: DB CONNECTION ERROR :: deletion error");
 				console.error(err);
