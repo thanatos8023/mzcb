@@ -266,8 +266,8 @@ app.post('/input/:intention', function(req, res) {
 	console.log("%%% Server log: /input/"+intention+" ROUTER");
 	console.log("New Input: " + newUserInput);
 
-	var sql = 'INSERT INTO MZCB_INPUTS (intention) VALUES(:inte)';
-	connection.execute(sql, {inte: intention}, function(inErr, inResult, inFields){
+	var sql = 'INSERT INTO MZCB_INPUTS (INTENTION, UTT) VALUES (:inte, :utt)';
+	connection.execute(sql, {inte: intention, utt: newUserInput}, function(inErr, inResult, inFields){
 		if (inErr) {
 			console.error("SERVER :: DB CONNECTION ERROR :: insertion error");
 			console.error(inErr);
