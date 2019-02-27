@@ -154,7 +154,7 @@ class Model(object):
                 cursor.execute(rule_sql, {'inte': intention})
 
                 row = cursor.fetchone()
-                
+
                 rule_temp = []
                 for row in cursor:
                     for col in row:
@@ -165,6 +165,9 @@ class Model(object):
                         if rule == "NaN":
                             continue
                         rule_temp.append(rule)
+
+                print("Intention:", intention)
+                print("Length of Rules:", len(rule_temp))
 
                 # 규칙 가져오기 끝: 변수명 rule_temp
 
