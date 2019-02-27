@@ -116,10 +116,9 @@ app.get('/mode/:intention', function (req, res) {
 				res.end();
 				return inErr
 			}
-
+			console.log(inResult.rows[i])
 			var inList = []
-			for (var j = 0; j < inResult.rows[0].length; i++) {
-				console.log(inResult.rows[i])
+			for (var j = 0; j < inResult.rows.length; i++) {
 				inList.push(inResult.rows[i][1])
 			}
 
