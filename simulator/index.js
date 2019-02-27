@@ -99,34 +99,25 @@ app.get('/mode/:intention', function (req, res) {
 		}
 
 		var intentionList = [];
+		var inList = [];
 		for (var i = 0; i < allResult.rows.length; i++) {
 			if (intentionList.indexOf(allResult.rows[i][0]) < 0) {
 				intentionList.push(allResult.rows[i][0])
+			}
+
+			if (allResult.rows[i][0] === intention) {
+				inList.push(allResult.rows[i][1]);
 			}
 		}
 
 		console.log("SERVER :: Number of Intention :: " + intentionList.length);
 
 		// 정보 출력
-		var inSQL = "SELECT * FROM MZCB_INPUTS WHERE INTENTION = :inte";
-		connection.execute(inSQL, {inte: intention}, function (inErr, inResult, inNext) {
-			if (inErr) { // DB 불러오기 에러
-				console.error("SERVER :: DB Connection : MZCB_INPUTS reading connection error");
-				console.error(inErr);
-				res.end();
-				return inErr
-			}
-			console.log(inResult.rows[i])
-			var inList = []
-			for (var j = 0; j < inResult.rows.length; i++) {
-				inList.push(inResult.rows[i][1])
-			}
 
-			res.render('input', {
-				nowIntention: intention,
-				intList: intentionList,
-				inputList: inList
-			});
+		res.render('input', {
+			nowIntention: intention,
+			intList: intentionList,
+			inputList: inList
 		});
 	});
 });
