@@ -102,6 +102,7 @@ app.get('/mode/:intention', function (req, res) {
 		var inList = [];
 		for (var i = 0; i < allResult.rows.length; i++) {
 			console.log(allResult.rows[i]);
+			console.log(allResult.rows[i][1]);
 
 			if (intentionList.indexOf(allResult.rows[i][0]) < 0) {
 				intentionList.push(allResult.rows[i][0])
