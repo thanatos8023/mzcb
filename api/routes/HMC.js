@@ -49,7 +49,7 @@ function get_intention(object, callback) {
     // LM이 주는 결과값은 response.body로 나오거든
     var intention = nluResponse.body;
 
-    if (intention.indexOf("FAQ") == -1) {
+    if (intention.indexOf("FAQ") == -1 || intention == null) {
       intention = "Fail"
     }
 
@@ -78,8 +78,8 @@ router.post('/message', function (req, res, next) {
     console.log("user command : " + object.content);
     console.log("user intention: " + intention);
 
-    var resSQL = "SELECT * FROM `MZCB_RESPONSE` WHERE `INTENTION` = ?"
-    connection.execute(resSQL, intention, function (resError, resResult, body) {
+    var resSQL = "select * from `MZCB_RESPONSE` where `INTENTION` = :inte"
+    connection.execute(resSQL, {inte: intention}, function (resError, resResult, body) {
       if (resError) {
         console.error("SERVER :: DB ERROR :: tb_response_text connection error");
         console.error(resError);
