@@ -119,7 +119,7 @@ app.get('/mode/:intention', function (req, res) {
 
 			var inList = []
 			for (var j = 0; j < inResult.rows[0].length; i++) {
-				inList.push(inResult.rows[0][i][1])
+				inList.push(inResult.rows[i][1])
 			}
 
 			res.render('input', {
@@ -191,7 +191,7 @@ app.get('/response/:intention', function(req, res) {
 			res.render('output', {
 				intList: intentionList,
 				nowIntention: intention,
-				resText: resResult.rows[0][0][1]
+				resText: resResult.rows[0][1]
 			});
 		});
 	});
@@ -262,9 +262,9 @@ app.get('/rule/:intention', function(req, res) {
 			res.render('rule', {
 				intList: intentionList,
 				nowIntention: intention,
-				morph1: ruleResult[0].rows[0][0][1],
-				morph2: ruleResult[0].rows[0][0][2],
-				morph3: ruleResult[0].rows[0][0][3]
+				morph1: ruleResult[0].rows[0][1],
+				morph2: ruleResult[0].rows[0][2],
+				morph3: ruleResult[0].rows[0][3]
 			});
 		});
 	});
