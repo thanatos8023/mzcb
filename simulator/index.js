@@ -76,11 +76,9 @@ app.post('/deleteview', function (req, res) {
 app.get('/mode', function (req, res) {
 	console.log('%%% Server log: /mode ROUTER');
 
-	var intention = req.params.intention;
-
 	// 기본적으로 도메인 목록은 무조건 전시해야함 
-	var sql = "SELECT * FROM MZCB_RESPONSE";
-	connection.execute(sql, function (allError, allResult, allBody) {
+	var sql = "SELECT * FROM MZCB_INPUTS";
+	connection.execute(sql, function (allError, allResult, allNext) {
 		if (allError) { // DB 불러오기 에러
 			console.error("SERVER :: DB Connection : All Database reading connection error");
 			console.error(allError);
@@ -88,27 +86,24 @@ app.get('/mode', function (req, res) {
 			return allError
 		}
 
-		var domainList = [];
-		for 
-
-
-		for (var i = 0; i < allResult.length; i++) {
-			if (domainList.indexOf(allResult[i].domain) < 0) {
-				domainList.push(allResult[i].domain);
+		var intentionList = [];
+		for (var i = 0; i < allResult.rows[0].length; i++) {
+			if (intentionList.indexOf(allResult.rows[0][i][0]) < 0) {
+				intentionList.push(allResult.rows[0][i][0])
 			}
 		}
 
-		res.render('input', {domList: domainList});
+		res.render('input', {intList: intentionList});
 	});
 });
 
-app.get('/mode/:domain', function (req, res) {
-	var domain = req.params.domain;
-	console.log('%%% Server log: /mode/' + domain + ' ROUTER');
+app.get('/mode/:intention', function (req, res) {
+	var intention = req.params.intention;
+	console.log('%%% Server log: /mode/' + intention + ' ROUTER');
 
 	// 기본적으로 도메인 목록은 무조건 전시해야함 
-	var sql = "SELECT * FROM tb_response_text";
-	connection.query(sql, function (allError, allResult, allBody) {
+	var sql = "SELECT * FROM MZCB_INPUTS";
+	connection.execute(sql, function (allError, allResult, allNext) {
 		if (allError) { // DB 불러오기 에러
 			console.error("SERVER :: DB Connection : All Database reading connection error");
 			console.error(allError);
@@ -116,152 +111,36 @@ app.get('/mode/:domain', function (req, res) {
 			return allError
 		}
 
-		var domainList = [];
-		for (var i = 0; i < allResult.length; i++) {
-			if (domainList.indexOf(allResult[i].domain) < 0) {
-				domainList.push(allResult[i].domain);
-			}
-		}
-
-		// 의도 목록은 반드시 필요함 
 		var intentionList = [];
-		for (var i = 0; i < allResult.length; i++) {
-			if (intentionList.indexOf(allResult[i].intention) < 0 && allResult[i].domain == domain) { // 도메인이 일치하면서, 목록에 추가되지 않은 의도만 
-				intentionList.push(allResult[i].intention);
+		for (var i = 0; i < allResult.rows[0].length; i++) {
+			if (intentionList.indexOf(allResult.rows[0][i][0]) < 0) {
+				intentionList.push(allResult.rows[0][i][0])
 			}
 		}
 
 		console.log("SERVER :: Number of Intention :: " + intentionList.length);
 
-		res.render('input', {
-			domList: domainList,
-			nowDomain: domain,
-			intList: intentionList
-		});
-	});
-});
-
-app.get('/mode/:domain/:intention', function (req, res) {
-	var domain = req.params.domain;
-	var intention = req.params.intention;
-
-	console.log('%%% Server log: /mode/' + domain + '/' + intention + ' ROUTER');
-
-	// 기본적으로 도메인 목록은 무조건 전시해야함 
-	var sql = "SELECT * FROM tb_response_text";
-	connection.query(sql, function (allError, allResult, allBody) {
-		if (allError) { // DB 불러오기 에러
-			console.error("SERVER :: DB Connection : All Database reading connection error");
-			console.error(allError);
-			res.end();
-			return allError
-		}
-
-		var domainList = [];
-		for (var i = 0; i < allResult.length; i++) {
-			if (domainList.indexOf(allResult[i].domain) < 0) {
-				domainList.push(allResult[i].domain);
-			}
-		}
-
-		// 의도 목록은 반드시 필요함 
-		var intentionList = [];
-		for (var i = 0; i < allResult.length; i++) {
-			if (intentionList.indexOf(allResult[i].intention) < 0 && allResult[i].domain == domain) { // 도메인이 일치하면서, 목록에 추가되지 않은 의도만 
-				intentionList.push(allResult[i].intention);
-			}
-		}
-
-		var statusList = [];
-		for (var i = 0; i < allResult.length; i ++) {
-			if (statusList.indexOf(allResult[i].chatbot_status) < 0 && allResult[i].intention == intention) {
-				statusList.push(allResult[i].chatbot_status);
-			}
-		}
-
-		res.render('input', {
-			domList: domainList,
-			nowDomain: domain,
-			intList: intentionList,
-			nowIntention: intention,
-			stList: statusList
-		});
-	});
-});
-
-app.get('/mode/:domain/:intention/:status', function(req, res) {
-	console.log('%%% Server log: /mode ROUTER');
-
-	var domain = req.params.domain;
-	var intention = req.params.intention;
-	var status = req.params.status;
-
-	// 기본적으로 도메인 목록은 무조건 전시해야함 
-	var sql = "SELECT * FROM tb_response_text";
-	connection.query(sql, function (allError, allResult, allBody) {
-		if (allError) { // DB 불러오기 에러
-			console.error("SERVER :: DB Connection : All Database reading connection error");
-			console.error(allError);
-			res.end();
-			return allError
-		}
-
-		var domainList = [];
-		var intentionList = [];
-		var statusList = [];
-		for (var i = 0; i < allResult.length; i++) {
-			if (domainList.indexOf(allResult[i].domain) < 0) {
-				domainList.push(allResult[i].domain);
-			}
-			if (intentionList.indexOf(allResult[i].intention) < 0 && allResult[i].domain == domain) { // 도메인이 일치하면서, 목록에 추가되지 않은 의도만 
-				intentionList.push(allResult[i].intention);
-			}
-			if (statusList.indexOf(allResult[i].chatbot_status) < 0 && allResult[i].intention == intention) {
-				statusList.push(allResult[i].chatbot_status);
-			}
-
-			if (allResult[i].domain == domain && allResult[i].intention == intention && allResult[i].chatbot_status == status) {
-				var response_type = allResult[i].response_type;
-				var response_text = allResult[i].response_text;
-				var response_object1 = allResult[i].response_object1;
-				var response_object2 = allResult[i].response_object2;
-			}
-		}
-
 		// 정보 출력
-		var inSQL = "SELECT * FROM tb_user_input WHERE domain = ? AND intention = ?";
-		connection.query(inSQL, [domain, intention], function (inError, inResult, inBody) {
-			if (inError) {
-				console.error("SERVER :: DB Connection : User Input Database reading connection error");
-				console.error(inError);
+		var inSQL = "SELECT * FROM MZCB_INPUTS WHERE INTENTION = :inte";
+		connection.execute(inSQL, {inte: intention}, function (inErr, inResult, inNext) {
+			if (inErr) { // DB 불러오기 에러
+				console.error("SERVER :: DB Connection : MZCB_INPUTS reading connection error");
+				console.error(inErr);
 				res.end();
-				return inError
+				return inErr
 			}
 
-			var ruleSQL = "SELECT * FROM tb_rule WHERE domain = ? AND intention = ?";
-			connection.query(ruleSQL, [domain, intention], function (ruleError, ruleResult, ruleBody) {
-				if (ruleError) {
-					console.error("SERVER :: DB Connection : Rule Database reading connection error");
-					console.error(ruleError);
-					res.end();
-					return ruleError
-				}
+			inList = []
+			for (var j = 0; j < inResult.rows[0].length; i++) {
+				inList.push(inResult.rows[0][i][1])
+			}
 
-				res.render('input', {
-					domList: domainList,
-					nowDomain: domain,
-					intList: intentionList,
-					nowIntention: intention,
-					stList: statusList,
-					nowStatus: status,
-					resType: response_type,
-					resText: response_text,
-					resObj1: response_object1,
-					resObj2: response_object2,
-					inputList: inResult,
-					ruleList: ruleResult[0]
-				});
-			});
+		});
+
+		res.render('input', {
+			nowIntention: intention,
+			intList: intentionList,
+			inputList: inList
 		});
 	});
 });
@@ -270,13 +149,9 @@ app.get('/mode/:domain/:intention/:status', function(req, res) {
 app.get('/response', function (req, res) {
 	console.log('%%% Server log: /response ROUTER');
 
-	var domain = req.params.domain;
-	var intention = req.params.intention;
-	var status = req.params.status;
-
 	// 기본적으로 도메인 목록은 무조건 전시해야함 
-	var sql = "SELECT * FROM tb_response_text";
-	connection.query(sql, function (allError, allResult, allBody) {
+	var sql = "SELECT * FROM MZCB_INPUTS";
+	connection.execute(sql, function (allError, allResult, allNext) {
 		if (allError) { // DB 불러오기 에러
 			console.error("SERVER :: DB Connection : All Database reading connection error");
 			console.error(allError);
@@ -284,114 +159,25 @@ app.get('/response', function (req, res) {
 			return allError
 		}
 
-		var domainList = [];
-		for (var i = 0; i < allResult.length; i++) {
-			if (domainList.indexOf(allResult[i].domain) < 0) {
-				domainList.push(allResult[i].domain);
-			}
-		}
-
-		res.render('output', {domList: domainList});
-	});
-});
-
-app.get('/response/:domain', function (req, res) {
-	var domain = req.params.domain;
-	console.log('%%% Server log: /response/' + domain + ' ROUTER');
-
-	// 기본적으로 도메인 목록은 무조건 전시해야함 
-	var sql = "SELECT * FROM tb_response_text";
-	connection.query(sql, function (allError, allResult, allBody) {
-		if (allError) { // DB 불러오기 에러
-			console.error("SERVER :: DB Connection : All Database reading connection error");
-			console.error(allError);
-			res.end();
-			return allError
-		}
-
-		var domainList = [];
-		for (var i = 0; i < allResult.length; i++) {
-			if (domainList.indexOf(allResult[i].domain) < 0) {
-				domainList.push(allResult[i].domain);
-			}
-		}
-
-		// 의도 목록은 반드시 필요함 
 		var intentionList = [];
-		for (var i = 0; i < allResult.length; i++) {
-			if (intentionList.indexOf(allResult[i].intention) < 0 && allResult[i].domain == domain) { // 도메인이 일치하면서, 목록에 추가되지 않은 의도만 
-				intentionList.push(allResult[i].intention);
+		for (var i = 0; i < allResult.rows[0].length; i++) {
+			if (intentionList.indexOf(allResult.rows[0][i][0]) < 0) {
+				intentionList.push(allResult.rows[0][i][0])
 			}
 		}
 
-		console.log("SERVER :: Number of Intention :: " + intentionList.length);
-
-		res.render('output', {
-			domList: domainList,
-			nowDomain: domain,
-			intList: intentionList
-		});
+		res.render('output', {intList: intentionList});
 	});
 });
 
-app.get('/response/:domain/:intention', function (req, res) {
-	var domain = req.params.domain;
-	var intention = req.params.intention;
-
-	console.log('%%% Server log: /response/' + domain + '/' + intention + ' ROUTER');
-
-	// 기본적으로 도메인 목록은 무조건 전시해야함 
-	var sql = "SELECT * FROM tb_response_text";
-	connection.query(sql, function (allError, allResult, allBody) {
-		if (allError) { // DB 불러오기 에러
-			console.error("SERVER :: DB Connection : All Database reading connection error");
-			console.error(allError);
-			res.end();
-			return allError
-		}
-
-		var domainList = [];
-		for (var i = 0; i < allResult.length; i++) {
-			if (domainList.indexOf(allResult[i].domain) < 0) {
-				domainList.push(allResult[i].domain);
-			}
-		}
-
-		// 의도 목록은 반드시 필요함 
-		var intentionList = [];
-		for (var i = 0; i < allResult.length; i++) {
-			if (intentionList.indexOf(allResult[i].intention) < 0 && allResult[i].domain == domain) { // 도메인이 일치하면서, 목록에 추가되지 않은 의도만 
-				intentionList.push(allResult[i].intention);
-			}
-		}
-
-		var statusList = [];
-		for (var i = 0; i < allResult.length; i ++) {
-			if (statusList.indexOf(allResult[i].chatbot_status) < 0 && allResult[i].intention == intention) {
-				statusList.push(allResult[i].chatbot_status);
-			}
-		}
-
-		res.render('output', {
-			domList: domainList,
-			nowDomain: domain,
-			intList: intentionList,
-			nowIntention: intention,
-			stList: statusList
-		});
-	});
-});
-
-app.get('/response/:domain/:intention/:status', function(req, res) {
+app.get('/response/:intention', function(req, res) {
 	console.log('%%% Server log: /response ROUTER');
 
-	var domain = req.params.domain;
 	var intention = req.params.intention;
-	var status = req.params.status;
 
 	// 기본적으로 도메인 목록은 무조건 전시해야함 
-	var sql = "SELECT * FROM tb_response_text";
-	connection.query(sql, function (allError, allResult, allBody) {
+	var sql = "SELECT * FROM MZCB_INPUTS";
+	connection.execute(sql, function (allError, allResult, allNext) {
 		if (allError) { // DB 불러오기 에러
 			console.error("SERVER :: DB Connection : All Database reading connection error");
 			console.error(allError);
@@ -399,166 +185,61 @@ app.get('/response/:domain/:intention/:status', function(req, res) {
 			return allError
 		}
 
-		var domainList = [];
 		var intentionList = [];
-		var statusList = [];
-		for (var i = 0; i < allResult.length; i++) {
-			if (domainList.indexOf(allResult[i].domain) < 0) {
-				domainList.push(allResult[i].domain);
-			}
-			if (intentionList.indexOf(allResult[i].intention) < 0 && allResult[i].domain == domain) { // 도메인이 일치하면서, 목록에 추가되지 않은 의도만 
-				intentionList.push(allResult[i].intention);
-			}
-			if (statusList.indexOf(allResult[i].chatbot_status) < 0 && allResult[i].intention == intention) {
-				statusList.push(allResult[i].chatbot_status);
-			}
-
-			if (allResult[i].domain == domain && allResult[i].intention == intention && allResult[i].chatbot_status == status) {
-				var response_type = allResult[i].response_type;
-				var response_text = allResult[i].response_text;
-				var response_object1 = allResult[i].response_object1;
-				var response_object2 = allResult[i].response_object2;
+		for (var i = 0; i < allResult.rows[0].length; i++) {
+			if (intentionList.indexOf(allResult.rows[0][i][0]) < 0) {
+				intentionList.push(allResult.rows[0][i][0])
 			}
 		}
 
-		// 정보 출력
-		res.render('output', {
-			domList: domainList,
-			nowDomain: domain,
-			intList: intentionList,
-			nowIntention: intention,
-			stList: statusList,
-			nowStatus: status,
-			resType: response_type,
-			resText: response_text,
-			resObj1: response_object1,
-			resObj2: response_object2
-		});
+		var resSQL = "select * from MZCB_RESPONSE where INTENTION = :inte"
+		connection.execute(resSQL, {inte: intention}, function (resErr, resResult) {
+			if (resErr) { // DB 불러오기 에러
+				console.error("SERVER :: DB Connection : MZCB_RESPONSE reading connection error");
+				console.error(resErr);
+				res.end();
+				return resErr
+			}
+
+			// 정보 출력
+			res.render('output', {
+				intList: intentionList,
+				nowIntention: intention,
+				resText: resResult.rows[0][0][1]
+			});
+		})
 	});
 });
 
 // Modify Rule page
 app.get('/rule', function (req, res) {
+	console.log('%%% Server log: /response ROUTER');
+
+	// 기본적으로 도메인 목록은 무조건 전시해야함 
+	var sql = "SELECT * FROM MZCB_INPUTS";
+	connection.execute(sql, function (allError, allResult, allNext) {
+		if (allError) { // DB 불러오기 에러
+			console.error("SERVER :: DB Connection : All Database reading connection error");
+			console.error(allError);
+			res.end();
+			return allError
+		}
+
+		var intentionList = [];
+		for (var i = 0; i < allResult.rows[0].length; i++) {
+			if (intentionList.indexOf(allResult.rows[0][i][0]) < 0) {
+				intentionList.push(allResult.rows[0][i][0])
+			}
+		}
+
+		res.render('rule', {intList: intentionList});
+	});
+});
+
+app.get('/rule/:intention', function(req, res) {
 	console.log('%%% Server log: /rule ROUTER');
 
-	var domain = req.params.domain;
 	var intention = req.params.intention;
-	var status = req.params.status;
-
-	// 기본적으로 도메인 목록은 무조건 전시해야함 
-	var sql = "SELECT * FROM tb_response_text";
-	connection.query(sql, function (allError, allResult, allBody) {
-		if (allError) { // DB 불러오기 에러
-			console.error("SERVER :: DB Connection : All Database reading connection error");
-			console.error(allError);
-			res.end();
-			return allError
-		}
-
-		var domainList = [];
-		for (var i = 0; i < allResult.length; i++) {
-			if (domainList.indexOf(allResult[i].domain) < 0) {
-				domainList.push(allResult[i].domain);
-			}
-		}
-
-		res.render('rule', {domList: domainList});
-	});
-});
-
-app.get('/rule/:domain', function (req, res) {
-	var domain = req.params.domain;
-	console.log('%%% Server log: /rule/' + domain + ' ROUTER');
-
-	// 기본적으로 도메인 목록은 무조건 전시해야함 
-	var sql = "SELECT * FROM tb_response_text";
-	connection.query(sql, function (allError, allResult, allBody) {
-		if (allError) { // DB 불러오기 에러
-			console.error("SERVER :: DB Connection : All Database reading connection error");
-			console.error(allError);
-			res.end();
-			return allError
-		}
-
-		var domainList = [];
-		for (var i = 0; i < allResult.length; i++) {
-			if (domainList.indexOf(allResult[i].domain) < 0) {
-				domainList.push(allResult[i].domain);
-			}
-		}
-
-		// 의도 목록은 반드시 필요함 
-		var intentionList = [];
-		for (var i = 0; i < allResult.length; i++) {
-			if (intentionList.indexOf(allResult[i].intention) < 0 && allResult[i].domain == domain) { // 도메인이 일치하면서, 목록에 추가되지 않은 의도만 
-				intentionList.push(allResult[i].intention);
-			}
-		}
-
-		console.log("SERVER :: Number of Intention :: " + intentionList.length);
-
-		res.render('rule', {
-			domList: domainList,
-			nowDomain: domain,
-			intList: intentionList
-		});
-	});
-});
-
-app.get('/rule/:domain/:intention', function (req, res) {
-	var domain = req.params.domain;
-	var intention = req.params.intention;
-
-	console.log('%%% Server log: /rule/' + domain + '/' + intention + ' ROUTER');
-
-	// 기본적으로 도메인 목록은 무조건 전시해야함 
-	var sql = "SELECT * FROM tb_response_text";
-	connection.query(sql, function (allError, allResult, allBody) {
-		if (allError) { // DB 불러오기 에러
-			console.error("SERVER :: DB Connection : All Database reading connection error");
-			console.error(allError);
-			res.end();
-			return allError
-		}
-
-		var domainList = [];
-		for (var i = 0; i < allResult.length; i++) {
-			if (domainList.indexOf(allResult[i].domain) < 0) {
-				domainList.push(allResult[i].domain);
-			}
-		}
-
-		// 의도 목록은 반드시 필요함 
-		var intentionList = [];
-		for (var i = 0; i < allResult.length; i++) {
-			if (intentionList.indexOf(allResult[i].intention) < 0 && allResult[i].domain == domain) { // 도메인이 일치하면서, 목록에 추가되지 않은 의도만 
-				intentionList.push(allResult[i].intention);
-			}
-		}
-
-		var statusList = [];
-		for (var i = 0; i < allResult.length; i ++) {
-			if (statusList.indexOf(allResult[i].chatbot_status) < 0 && allResult[i].intention == intention) {
-				statusList.push(allResult[i].chatbot_status);
-			}
-		}
-
-		res.render('rule', {
-			domList: domainList,
-			nowDomain: domain,
-			intList: intentionList,
-			nowIntention: intention,
-			stList: statusList
-		});
-	});
-});
-
-app.get('/rule/:domain/:intention/:status', function(req, res) {
-	console.log('%%% Server log: /rule ROUTER');
-
-	var domain = req.params.domain;
-	var intention = req.params.intention;
-	var status = req.params.status;
 
 	if (domain === "System") {
 		res.redirect('/rule');
@@ -566,8 +247,8 @@ app.get('/rule/:domain/:intention/:status', function(req, res) {
 	}
 
 	// 기본적으로 도메인 목록은 무조건 전시해야함 
-	var sql = "SELECT * FROM tb_response_text";
-	connection.query(sql, function (allError, allResult, allBody) {
+	var sql = "SELECT * FROM MZCB_INPUTS";
+	connection.execute(sql, function (allError, allResult, allNext) {
 		if (allError) { // DB 불러오기 에러
 			console.error("SERVER :: DB Connection : All Database reading connection error");
 			console.error(allError);
@@ -575,24 +256,16 @@ app.get('/rule/:domain/:intention/:status', function(req, res) {
 			return allError
 		}
 
-		var domainList = [];
 		var intentionList = [];
-		var statusList = [];
-		for (var i = 0; i < allResult.length; i++) {
-			if (domainList.indexOf(allResult[i].domain) < 0) {
-				domainList.push(allResult[i].domain);
-			}
-			if (intentionList.indexOf(allResult[i].intention) < 0 && allResult[i].domain == domain) { // 도메인이 일치하면서, 목록에 추가되지 않은 의도만 
-				intentionList.push(allResult[i].intention);
-			}
-			if (statusList.indexOf(allResult[i].chatbot_status) < 0 && allResult[i].intention == intention) {
-				statusList.push(allResult[i].chatbot_status);
+		for (var i = 0; i < allResult.rows[0].length; i++) {
+			if (intentionList.indexOf(allResult.rows[0][i][0]) < 0) {
+				intentionList.push(allResult.rows[0][i][0])
 			}
 		}
 
 		// 정보 출력
-		ruleSQL = "select * from TB_RULE where domain = ? and intention = ?";
-		connection.query(ruleSQL, [domain, intention], function (ruleErr, ruleResult, ruleNext) {
+		ruleSQL = "select * from MZCB_RULES where INTENTION = :inte";
+		connection.execute(ruleSQL, {inte: intention}, function (ruleErr, ruleResult, ruleNext) {
 			if (ruleErr) { // DB 불러오기 에러
 				console.error("SERVER :: DB Connection : Rule Database reading connection error");
 				console.error(ruleErr);
@@ -601,33 +274,27 @@ app.get('/rule/:domain/:intention/:status', function(req, res) {
 			}
 
 			res.render('rule', {
-				domList: domainList,
-				nowDomain: domain,
 				intList: intentionList,
 				nowIntention: intention,
-				stList: statusList,
-				nowStatus: status,
-				morph1: ruleResult[0].morph1,
-				morph2: ruleResult[0].morph2,
-				morph3: ruleResult[0].morph3
+				morph1: ruleResult[0].rows[0][0][1],
+				morph2: ruleResult[0].rows[0][0][2],
+				morph3: ruleResult[0].rows[0][0][3]
 			});
 		});
 	});
 });
 
 // Input Utterance in DB
-app.post('/input/:domain/:intention/:status', function(req, res) {
-	var domain = req.params.domain;
+app.post('/input/:intention', function(req, res) {
 	var intention = req.params.intention;
-	var status = req.params.status;
 
 	var newUserInput = req.body.newUserInput;
 
-	console.log("%%% Server log: /input ROUTER");
+	console.log("%%% Server log: /input/"+intention+" ROUTER");
 	console.log("New Input: " + newUserInput);
 
-	var sql = 'INSERT INTO tb_user_input (domain, intention, user_input) VALUES(?, ?, ?)';
-	connection.query(sql, [domain, intention, newUserInput], function(inErr, inResult, inFields){
+	var sql = 'INSERT INTO MZCB_INPUTS (intention) VALUES(:inte)';
+	connection.execute(sql, {inte: intention}, function(inErr, inResult, inFields){
 		if (inErr) {
 			console.error("SERVER :: DB CONNECTION ERROR :: insertion error");
 			console.error(inErr);
@@ -636,25 +303,23 @@ app.post('/input/:domain/:intention/:status', function(req, res) {
 		}
 
 		console.log("%%% Server log: New information Successfully added in DB.");
-		res.redirect('/mode/' + domain + '/' + intention + '/' + status);
+		res.redirect('/mode/' + intention);
 	});
 });
 
 
 // Delete Utterance in DB
-app.post('/delete/:domain/:intention/:status', function(req, res) {
-	var domain = req.params.domain;
+app.post('/delete/:intention', function(req, res) {
 	var intention = req.params.intention;
-	var status = req.params.status;
 
 	var checked_utt = req.body.checked_utt;
 
-	console.log("%%% Server log: /deleteinput ROUTER");
+	console.log("%%% Server log: /delete/"+intention+" ROUTER");
 	console.log("Checked Utterance: " + checked_utt);
 
 	if (typeof(checked_utt) === typeof('string')) {
-		var sql = "DELETE FROM tb_user_input WHERE user_input=?";
-		connection.query(sql, [checked_utt], function(err, result, body) {
+		var sql = "DELETE FROM MZCB_INPUTS WHERE UTT=:utt";
+		connection.execute(sql, {utt: checked_utt}, function(err, result, body) {
 			if (err) {
 				console.error("SERVER :: DB CONNECTION ERROR :: deletion error");
 				console.error(err);
@@ -662,7 +327,7 @@ app.post('/delete/:domain/:intention/:status', function(req, res) {
 				return err
 			}
 			console.log("%%% Server log: /delete ROUTER :: Successfully delete [" + checked_utt + "] in DB.");
-			res.redirect('/mode/' + domain + '/' + intention + '/' + status);
+			res.redirect('/mode/' + intention);
 		});	
 	}
 	else {
@@ -681,7 +346,7 @@ app.post('/delete/:domain/:intention/:status', function(req, res) {
 				return err
 			}
 			console.log("%%% Server log: /delete ROUTER :: Successfully delete [" + checked_utt + "] in DB.");
-			res.redirect('/mode/' + domain + '/' + intention + '/' + status);
+			res.redirect('/mode/' + intention);
 		});	
 	}
 	
@@ -689,25 +354,17 @@ app.post('/delete/:domain/:intention/:status', function(req, res) {
 
 
 // Update response
-app.post('/updateres/:domain/:intention/:status', function (req, res) {
-	var domain = req.params.domain;
+app.post('/updateres/:intention', function (req, res) {
 	var intention = req.params.intention;
-	var status = req.params.status;
 
 	//console.log(req.body);
-	var newType = req.body.newType;
 	var newText = req.body.newText;
-	var newObj1 = req.body.newObj1;
-	var newObj2 = req.body.newObj2;
 
-	console.log("%%% Server log: /update ROUTER");
-	console.log("New Type: " + newType);
+	console.log("%%% Server log: /update"+intention+" ROUTER");
 	console.log("New Text: " + newText);
-	console.log("New Object1: " + newObj1);
-	console.log("New Object2: " + newObj2);
 
-	var udtSQL = "UPDATE tb_response_text SET response_type = ?, response_text = ?, response_object1 = ?, response_object2 = ? WHERE domain = ? AND intention = ? AND chatbot_status = ?";
-	connection.query(udtSQL, [newType, newText, newObj1, newObj2, domain, intention, status], function (udtErr, udtResult, udtField) {
+	var udtSQL = "UPDATE MZCB_RESPONSE SET RES_TEXT = :resText WHERE INTENTION = :inte";
+	connection.execute(udtSQL, {resText: newText, inte: intention}, function (udtErr, udtResult, udtField) {
 		if (udtErr) {
 			console.error("SERVER :: DB CONNECTION ERROR :: update error");
 			console.error(udtErr);
@@ -716,29 +373,27 @@ app.post('/updateres/:domain/:intention/:status', function (req, res) {
 		}
 
 		console.log("%%% Server log: /updateres ROUTER :: Successfully Update [" + intention + "]  response in DB.");
-		res.redirect('/response/' + domain + '/' + intention + '/' + status);
+		res.redirect('/response/' + intention);
 	});
 });
 
 
 // Update rule
-app.post('/updaterule/:domain/:intention/:status', function (req, res) {
-	var domain = req.params.domain;
+app.post('/updaterule/:intention', function (req, res) {
 	var intention = req.params.intention;
-	var status = req.params.status;
 
 	//console.log(req.body);
 	var newMorph1 = req.body.newmorph1;
 	var newMorph2 = req.body.newmorph2;
 	var newMorph3 = req.body.newmorph3;
 
-	console.log("%%% Server log: /updaterule ROUTER");
+	console.log("%%% Server log: /updaterule"+intention+" ROUTER");
 	console.log("New Morph 1: " + newMorph1);
 	console.log("New Morph 2: " + newMorph2);
 	console.log("New Morph 3: " + newMorph3);
 
-	var udtSQL = "UPDATE tb_rule SET  morph1 = ?, morph2 = ?, morph3 = ? WHERE domain = ? AND intention = ?"
-	connection.query(udtSQL, [newMorph1, newMorph2, newMorph3, domain, intention], function (udtErr, udtResult, udtField) {
+	var udtSQL = "UPDATE MZCB_RULES SET  morph1 = :m1, morph2 = :m2, morph3 = :m3 WHERE intention = :inte"
+	connection.query(udtSQL, {m1:newMorph1, m2:newMorph2, m3:newMorph3, inte:intention}, function (udtErr, udtResult, udtField) {
 		if (udtErr) {
 			console.error("SERVER :: DB CONNECTION ERROR :: update error");
 			console.error(udtErr);
@@ -747,6 +402,6 @@ app.post('/updaterule/:domain/:intention/:status', function (req, res) {
 		}
 
 		console.log("%%% Server log: /updaterule ROUTER :: Successfully Update [" + intention + "]  rule in DB.");
-		res.redirect('/rule/' + domain + '/' + intention + '/' + status);
+		res.redirect('/rule/' + intention);
 	});
 });

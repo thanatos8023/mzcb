@@ -13,25 +13,19 @@ html
 					h1 Chatbot Simulator
 				div.sub
 					ul
-						each domain in domList
-							li
-							a(href='/rule/#{domain}')= domain
-							if nowDomain==domain
-								ul
-									each intention in intList
-										li
-											a(href='/rule/#{domain}/#{intention}')= intention
-											if nowIntention==intention
-												ul
-													each status in stList
-														li
-															a(href='/rule/#{domain}/#{intention}/#{status}')= status
+						each intention in intList
+							if nowIntention==intention
+								li.active
+									a(href='/mode/#{intention}')= intention
+							else
+								li
+									a(href='/mode/#{intention}')= intention
 			div.wrap-right
 				div.gnb
-					a(href="/mode/#{nowDomain}/#{nowIntention}/#{nowStatus}") Manage Input
-					a(href="/response/#{nowDomain}/#{nowIntention}/#{nowStatus}") Manage Response
-					a(href="/rule/#{nowDomain}/#{nowIntention}/#{nowStatus}" class="on") Manage Rule
-				form(action='/updaterule/#{nowDomain}/#{nowIntention}/#{nowStatus}' method='post' id='updateruleform')
+					a(href="/mode/#{nowIntention}") Manage Input
+					a(href="/response/#{nowIntention}") Manage Response
+					a(href="/rule/#{nowIntention}" class="on") Manage Rule
+				form(action='/updaterule/#{nowIntention}' method='post' id='updateruleform')
 					div._contents
 						div.box
 							div(class="_top text-right")

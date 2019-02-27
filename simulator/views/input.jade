@@ -13,37 +13,21 @@ html
 					h1 Chatbot Simulator
 				div.sub
 					ul
-						each domain in domList
-							if nowDomain==domain
+						each intention in intList
+							if nowIntention==intention
 								li.active
-									a(href='/mode/#{domain}')= domain
-								ul
-									each intention in intList
-										if nowIntention==intention
-											li.active
-												a(href='/mode/#{domain}/#{intention}')= intention
-											ul
-												each status in stList
-													if nowStatus==status
-														li.active
-															a(href='/mode/#{domain}/#{intention}/#{status}')= status
-													else		
-														li
-															a(href='/mode/#{domain}/#{intention}/#{status}')= status
-										else
-											li.active
-												a(href='/mode/#{domain}/#{intention}')= intention
+									a(href='/mode/#{intention}')= intention
 							else
 								li
-									a(href='/mode/#{domain}')= domain
+									a(href='/mode/#{intention}')= intention
 			div.wrap-right
 				div.gnb
-					a(href="/mode/#{nowDomain}/#{nowIntention}/#{nowStatus}" class="on") Manage Input
-					a(href="/response/#{nowDomain}/#{nowIntention}/#{nowStatus}") Manage Response
-					a(href="/rule/#{nowDomain}/#{nowIntention}/#{nowStatus}") Manage Rule
+					a(href="/mode/#{nowIntention}" class="on") Manage Input
+					a(href="/response/#{nowIntention}") Manage Response
+					a(href="/rule/#{nowIntention}") Manage Rule
 				div._contents
 					div.box
-						form(action='/input/#{nowDomain}/#{nowIntention}/#{nowStatus}' method='post' id='insertform')
+						form(action='/input/#{nowIntention}' method='post' id='insertform')
 							div.user-input
 								label(for="la01") User Input
 								input(type="text" id="la01" name="newUserInput")
@@ -51,7 +35,7 @@ html
 									i.icon-plus 
 								button(type="submit" class="button gray" value="la01" form="deleteform") 삭제
 									i.icon-trash 
-						form(action='/delete/#{nowDomain}/#{nowIntention}/#{nowStatus}' method='post' id='deleteform')
+						form(action='/delete/#{nowIntention}' method='post' id='deleteform')
 							div.user-list
 								if inputList
 									ul
@@ -59,15 +43,5 @@ html
 										li
 											input(type="checkbox" name="checked_utt" value=row.user_input)
 											label(for=row.user_input)= row.user_input
-							if pages
-								div.paging
-									a(href="/input/#{nowDomain}/#{nowIntention}/#{nowStatus}/#{nowPage - 1}")
-										i.icon-prev
-											span.hidden 이전으로
-									each page in pages
-										if page == nowPage
-											a(href="/input/#{nowDomain}/#{nowIntention}/#{nowStatus}/#{n}" class="on")= page
-										else
-											a(href="/input/#{nowDomain}/#{nowIntention}/#{nowStatus}/#{page}")= n
 		script(src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js")
 		script(src="js/func.js")

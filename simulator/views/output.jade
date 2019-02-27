@@ -13,25 +13,19 @@ html
 					h1 Chatbot Simulator
 				div.sub
 					ul
-						each domain in domList
-							li
-							a(href='/response/#{domain}')= domain
-							if nowDomain==domain
-								ul
-									each intention in intList
-										li
-											a(href='/response/#{domain}/#{intention}')= intention
-											if nowIntention==intention
-												ul
-													each status in stList
-														li
-															a(href='/response/#{domain}/#{intention}/#{status}')= status
+						each intention in intList
+							if nowIntention==intention
+								li.active
+									a(href='/mode/#{intention}')= intention
+							else
+								li
+									a(href='/mode/#{intention}')= intention
 			div.wrap-right
 				div.gnb
-					a(href="/mode/#{nowDomain}/#{nowIntention}/#{nowStatus}") Manage Input
-					a(href="/response/#{nowDomain}/#{nowIntention}/#{nowStatus}" class="on") Manage Response
-					a(href="/rule/#{nowDomain}/#{nowIntention}/#{nowStatus}") Manage Rule
-				form(action='/updateres/#{nowDomain}/#{nowIntention}/#{nowStatus}' method='post' id='updateresform')
+					a(href="/mode/#{nowIntention}") Manage Input
+					a(href="/response/#{nowIntention}" class="on") Manage Response
+					a(href="/rule/#{nowIntention}") Manage Rule
+				form(action='/updateres/#{nowIntention}' method='post' id='updateresform')
 					div._contents
 						div.box
 							div(class="_top text-right")
@@ -43,19 +37,10 @@ html
 									caption manage Response table
 									thead
 										tr
-											th(scope="col") Type
 											th(scope="col") Text
-											th(scope="col") Object 1
-											th(scope="col") Object 2
 									tbody
 										tr
 											td
-												textarea(name="newType", id="newType")= resType
-											td
 												textarea(name="newText", id="newText")= resText
-											td
-												textarea(name="newObj1", id="newObj1")= resObj1
-											td
-												textarea(name="newObj2", id="newObj2")= resObj2
 		script(src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js")
 		script(src="js/func.js")
