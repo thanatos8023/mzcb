@@ -234,7 +234,7 @@ class Model(object):
                 else:
                     matched_case += 1
 
-            if (matched_case == len(self.dm['Intentions'][key]['Rule'])) and matched_case:
+            if (matched_case == len(self.dm['Intentions'][key]['Rule'])) or not matched_case:
                 # This case, the utterance is in this intention
                 return key
 
@@ -254,6 +254,8 @@ class Model(object):
             cur.execute(sql)
 
             for inte, utt in cur:
+                print("SAVED UTT:", utt)
+                print("INPUT UTT:", self.utt)
                 if self.utt == utt:
                     return inte
 
