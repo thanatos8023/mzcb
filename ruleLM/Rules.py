@@ -77,8 +77,7 @@ class Model(object):
 
         # DB 교체
         self.dm = self.get_DM_from_DB()
-        print(self.dm)
-
+        
         # 사용자 발화에서 intention 을 찾는 코드
         # intention 찾기에 실패한 경우, False 가 저장됨
         # 현재 pin 이나 온도가 입력될 경우 False 가 저장되고 있음
@@ -228,6 +227,7 @@ class Model(object):
                 # There are set of morphs
                 print("Intention:", key)
                 print("Morph set:", necset)
+                print("Result of POS:", self.pos)
                 matched = necset & set(self.pos)
                 if not matched:
                     continue

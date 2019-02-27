@@ -88,10 +88,10 @@ router.post('/message', function (req, res, next) {
       }
 
       res.json({
-        "type": resResult[0].response_type,
-        "text": resResult[0].response_text,
-        "object1": resResult[0].response_object1,
-        "object2": resResult[0].response_object2,
+        "type": "simpleText",
+        "text": resResult[0].RES_TEXT,
+        "object1": null,
+        "object2": null,
       });
     });
   });
