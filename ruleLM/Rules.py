@@ -118,7 +118,7 @@ class Model(object):
                 result.append(tuple(morph_tag.split('/')))
             return set(result)
         else:
-            return set()
+            return "NaN"
 
     # DB 에서 DM 정보를 불러오는 함수
     ### DB 에 필요한 필드
@@ -153,11 +153,8 @@ class Model(object):
                 rule_sql = 'SELECT * FROM MZCB_RULES WHERE INTENTION=:inte'
                 cursor.execute(rule_sql, {'inte': intention})
 
-                row = cursor.fetchone()
-
                 rule_temp = []
                 for row in cursor:
-                    print(row)
                     for col in row:
                         if col in ['Control_Car', 'FAQ', 'SmallTalk', intention]:
                             continue
@@ -166,9 +163,6 @@ class Model(object):
                         if rule == "NaN":
                             continue
                         rule_temp.append(rule)
-
-                print("Intention:", intention)
-                print("Length of Rules:", len(rule_temp))
 
                 # 규칙 가져오기 끝: 변수명 rule_temp
 
