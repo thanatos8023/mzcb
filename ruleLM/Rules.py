@@ -157,6 +157,7 @@ class Model(object):
 
                 rule_temp = []
                 for row in cursor:
+                    print(row)
                     for col in row:
                         if col in ['Control_Car', 'FAQ', 'SmallTalk', intention]:
                             continue
