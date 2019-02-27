@@ -40,20 +40,7 @@ app.listen(23705, function(){
 
 // Monitoring page
 app.get('/view', function(req, res) {
-	var sql = "SELECT * FROM tb_monitoring"
-	connection.query(sql, function(err, monit_info, body) {
-		if (err) {
-			console.error("SERVER :: DB ERROR :: tb_monitoring selection error!");
-			console.error(err);
-			res.end();
-			return err
-		}
-
-		console.log("rows: ", monit_info.length);
-		//console.log("sample: ", monit_info[0]);
-		
-		res.send("이 기능은 추후에 구현될 예정입니다.");
-	});
+	res.send("이 기능은 추후에 구현될 예정입니다.");
 });
 
 app.post('/deleteview', function (req, res) {
@@ -88,8 +75,8 @@ app.get('/mode', function (req, res) {
 
 		var intentionList = [];
 		for (var i = 0; i < allResult.rows[0].length; i++) {
-			if (intentionList.indexOf(allResult.rows[0][i][0]) < 0) {
-				intentionList.push(allResult.rows[0][i][0])
+			if (intentionList.indexOf(allResult.rows[i][0]) < 0) {
+				intentionList.push(allResult.rows[i][0])
 			}
 		}
 
@@ -113,8 +100,8 @@ app.get('/mode/:intention', function (req, res) {
 
 		var intentionList = [];
 		for (var i = 0; i < allResult.rows[0].length; i++) {
-			if (intentionList.indexOf(allResult.rows[0][i][0]) < 0) {
-				intentionList.push(allResult.rows[0][i][0])
+			if (intentionList.indexOf(allResult.rows[i][0]) < 0) {
+				intentionList.push(allResult.rows[i][0])
 			}
 		}
 
@@ -161,8 +148,8 @@ app.get('/response', function (req, res) {
 
 		var intentionList = [];
 		for (var i = 0; i < allResult.rows[0].length; i++) {
-			if (intentionList.indexOf(allResult.rows[0][i][0]) < 0) {
-				intentionList.push(allResult.rows[0][i][0])
+			if (intentionList.indexOf(allResult.rows[i][0]) < 0) {
+				intentionList.push(allResult.rows[i][0])
 			}
 		}
 
@@ -187,8 +174,8 @@ app.get('/response/:intention', function(req, res) {
 
 		var intentionList = [];
 		for (var i = 0; i < allResult.rows[0].length; i++) {
-			if (intentionList.indexOf(allResult.rows[0][i][0]) < 0) {
-				intentionList.push(allResult.rows[0][i][0])
+			if (intentionList.indexOf(allResult.rows[i][0]) < 0) {
+				intentionList.push(allResult.rows[i][0])
 			}
 		}
 
@@ -227,8 +214,8 @@ app.get('/rule', function (req, res) {
 
 		var intentionList = [];
 		for (var i = 0; i < allResult.rows[0].length; i++) {
-			if (intentionList.indexOf(allResult.rows[0][i][0]) < 0) {
-				intentionList.push(allResult.rows[0][i][0])
+			if (intentionList.indexOf(allResult.rows[i][0]) < 0) {
+				intentionList.push(allResult.rows[i][0])
 			}
 		}
 
@@ -258,8 +245,8 @@ app.get('/rule/:intention', function(req, res) {
 
 		var intentionList = [];
 		for (var i = 0; i < allResult.rows[0].length; i++) {
-			if (intentionList.indexOf(allResult.rows[0][i][0]) < 0) {
-				intentionList.push(allResult.rows[0][i][0])
+			if (intentionList.indexOf(allResult.rows[i][0]) < 0) {
+				intentionList.push(allResult.rows[i][0])
 			}
 		}
 
