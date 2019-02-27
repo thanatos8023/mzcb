@@ -124,8 +124,8 @@ class Model(object):
         responseForm = {
             "type": response_text_row_in_db[3],
             "text": response_text_row_in_db[4],
-            "object1": response_text_row_in_db[5],
-            "object2": response_text_row_in_db[6]
+            "object1": None,
+            "object2": None
         }
 
         return responseForm
@@ -190,9 +190,6 @@ class Model(object):
                 cursor.execute(res_sql, {'inte': intention})
 
                 res_temp = {}
-                for status_row in cursor:
-                    res_temp[status_row[2]] = self.get_responseForm(status_row)
-
                 # column name and index matching
                 # domain            :   0
                 # intention         :   1
