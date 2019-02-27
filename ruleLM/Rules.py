@@ -77,10 +77,7 @@ class Model(object):
 
         # DB 교체
         self.dm = self.get_DM_from_DB()
-
-        # 사용자 발화에서 pin 을 찾는 코드
-        # pin이 아닐 경우, False 가 저장됨
-        self.pin = self.__get_pin__()
+        print(self.dm)
 
         # 사용자 발화에서 intention 을 찾는 코드
         # intention 찾기에 실패한 경우, False 가 저장됨
@@ -88,25 +85,6 @@ class Model(object):
         self.intention = self.__get_intention__()
 
         ## 응답 형식
-
-    ## 미완성
-    def make_response(self):
-        # DB 연결
-        connection = cx_Oracle.connect(
-            'mzen',
-            'mediazen',
-            '192.168.123.31/xe',
-        )
-
-        with connection.cursor() as user_cursor:
-            user_sql = 'SELECT * FROM tb_user_info WHERE kakao_info=%s'
-            user_cursor.execute(user_sql, (self.user_key))
-
-            user_info = user_cursor.fetchone()
-
-            if not user_info:
-                return self.dm["Intentions"]
-
 
 
     def get_responseForm(self, response_text_row_in_db):
@@ -124,8 +102,8 @@ class Model(object):
         responseForm = {
             "type": response_text_row_in_db[3],
             "text": response_text_row_in_db[4],
-            "object1": None,
-            "object2": None
+            "object1": response_text_row_in_db[5],
+            "object2": response_text_row_in_db[6]
         }
 
         return responseForm
@@ -141,7 +119,7 @@ class Model(object):
                 result.append(tuple(morph_tag.split('/')))
             return set(result)
         else:
-            return None
+            return "NaN"
 
     # DB 에서 DM 정보를 불러오는 함수
     ### DB 에 필요한 필드
@@ -211,62 +189,12 @@ class Model(object):
 
             ## Intentions 완성: 변수명 intentions
 
-            ## Pin은 삭제
-
-        # DB 닫기
-        connection.close()
-
         # 결과
         dm = {
             'Intentions': intentions,
         }
 
         return dm
-
-
-    # 사용자 입력 발화에서 pin을 찾는 함수
-    def __get_pin__(self):
-        # 정규식을 활용함
-        # 4자리 숫자를 입력할 경우, pin으로 간주함
-        pin = re.match('\d\d\d\d', self.utt)
-        if not pin:
-            return False
-        else:
-            return pin.group()
-
-    # 사용자 입력 발화에서 온도를 찾는 함수
-    def get_temperature_from_utterance(self):
-        # 정규식을 활용함
-        # 숫자의 연쇄를 찾아서, 이를 숫자로 변환하고, 온도로 반환
-        temp_match = re.match('\d+', self.utt)
-
-        # 숫자가 없을 경우도 고려함
-        # '최대', '최고' 등이 발화 안에 있는 경우, 자동으로 32도로 설정
-        # '최소', '최저' 등이 발화 안에 있는 경우, 자동으로 16도로 설정
-        # '적당' 등이 발화 안에 있는 경우, 자동으로 24도로 설정
-        if not temp_match:
-            max_match = {('최대', 'NNG'), ('최고', 'NNG')} & set(self.pos)
-            min_match = {('최소', 'NNG'), ('최저', 'NNG')} & set(self.pos)
-            mid_match = {('적당', 'XR')} & set(self.pos)
-
-            if max_match:
-                return 32
-            elif min_match:
-                return 16
-            elif mid_match:
-                return 24
-            # 숫자도 없고, 앞서 제시한 형태소들도 보이지 않을 시, -1을 반환
-            else:
-                return -1
-        # 숫자가 있을 경우
-        else:
-            temp = int(temp_match.group())
-            # 이 숫자가 적절한 온도의 범위 안에 있을 경우에만 온도를 반환
-            if 15 < temp < 33:
-                return temp
-            # 숫자는 있는데 온도의 범위를 벗어난 경우에는 -273을 반환
-            else:
-                return -273
 
     # intention 반환 함수
     # intention 탐색 순서: 버튼인가? -> 코퍼스에 등록된 발화인가? -> Rule에 맞는 발화인가?
