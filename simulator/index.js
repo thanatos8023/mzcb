@@ -74,7 +74,7 @@ app.get('/mode', function (req, res) {
 		}
 
 		var intentionList = [];
-		for (var i = 0; i < allResult.rows[0].length; i++) {
+		for (var i = 0; i < allResult.rows.length; i++) {
 			if (intentionList.indexOf(allResult.rows[i][0]) < 0) {
 				intentionList.push(allResult.rows[i][0])
 			}
@@ -117,7 +117,7 @@ app.get('/mode/:intention', function (req, res) {
 				return inErr
 			}
 
-			inList = []
+			var inList = []
 			for (var j = 0; j < inResult.rows[0].length; i++) {
 				inList.push(inResult.rows[0][i][1])
 			}
