@@ -153,12 +153,17 @@ class Model(object):
                 rule_sql = 'SELECT * FROM MZCB_RULES WHERE INTENTION=:inte'
                 cursor.execute(rule_sql, {'inte': intention})
 
-                for inte, m1, m2, m3 in cursor:
-                    rule1 = self.str2obj(m1)
-                    rule2 = self.str2obj(m2)
-                    rule3 = self.str2obj(m3)
+                row = cursor.fetchone()
 
-                    rule_temp = [rule1, rule2, rule3]
+                for row in cursor:
+                    for col in row:
+                        if col in ['Control_Car', 'FAQ', 'SmallTalk', intention]:
+                            continue
+
+                        rule = self.str2obj(col)
+                        if rule == "NaN":
+                            continue
+                        rule_temp.append(rule)
 
                 # 규칙 가져오기 끝: 변수명 rule_temp
 
@@ -225,16 +230,13 @@ class Model(object):
             matched_case = 0
             for necset in self.dm['Intentions'][key]['Rule']:
                 # There are set of morphs
-                print("Intention:", key)
-                print("Morph set:", necset)
-                print("Result of POS:", self.pos)
                 matched = necset & set(self.pos)
                 if not matched:
                     continue
                 else:
                     matched_case += 1
 
-            if (matched_case == len(self.dm['Intentions'][key]['Rule'])) or not matched_case:
+            if (matched_case == len(self.dm['Intentions'][key]['Rule'])) and matched_case:
                 # This case, the utterance is in this intention
                 return key
 
@@ -254,8 +256,6 @@ class Model(object):
             cur.execute(sql)
 
             for inte, utt in cur:
-                print("SAVED UTT:", utt)
-                print("INPUT UTT:", self.utt)
                 if self.utt == utt:
                     return inte
 
@@ -265,7 +265,7 @@ class Model(object):
 if __name__ == '__main__':
     req = {
         'user_key': 'sf1234dsf',
-        'utt': '17도로 시동 켜줘',
+        'utt': '블루링크 해지할래',
         'code': 7000,
         'intention': '',
         'options': 0
