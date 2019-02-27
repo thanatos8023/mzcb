@@ -99,7 +99,7 @@ app.get('/mode/:intention', function (req, res) {
 		}
 
 		var intentionList = [];
-		for (var i = 0; i < allResult.rows[0].length; i++) {
+		for (var i = 0; i < allResult.rows.length; i++) {
 			if (intentionList.indexOf(allResult.rows[i][0]) < 0) {
 				intentionList.push(allResult.rows[i][0])
 			}
@@ -122,12 +122,11 @@ app.get('/mode/:intention', function (req, res) {
 				inList.push(inResult.rows[0][i][1])
 			}
 
-		});
-
-		res.render('input', {
-			nowIntention: intention,
-			intList: intentionList,
-			inputList: inList
+			res.render('input', {
+				nowIntention: intention,
+				intList: intentionList,
+				inputList: inList
+			});
 		});
 	});
 });
@@ -147,7 +146,7 @@ app.get('/response', function (req, res) {
 		}
 
 		var intentionList = [];
-		for (var i = 0; i < allResult.rows[0].length; i++) {
+		for (var i = 0; i < allResult.rows.length; i++) {
 			if (intentionList.indexOf(allResult.rows[i][0]) < 0) {
 				intentionList.push(allResult.rows[i][0])
 			}
@@ -173,7 +172,7 @@ app.get('/response/:intention', function(req, res) {
 		}
 
 		var intentionList = [];
-		for (var i = 0; i < allResult.rows[0].length; i++) {
+		for (var i = 0; i < allResult.rows.length; i++) {
 			if (intentionList.indexOf(allResult.rows[i][0]) < 0) {
 				intentionList.push(allResult.rows[i][0])
 			}
@@ -194,7 +193,7 @@ app.get('/response/:intention', function(req, res) {
 				nowIntention: intention,
 				resText: resResult.rows[0][0][1]
 			});
-		})
+		});
 	});
 });
 
@@ -213,7 +212,7 @@ app.get('/rule', function (req, res) {
 		}
 
 		var intentionList = [];
-		for (var i = 0; i < allResult.rows[0].length; i++) {
+		for (var i = 0; i < allResult.rows.length; i++) {
 			if (intentionList.indexOf(allResult.rows[i][0]) < 0) {
 				intentionList.push(allResult.rows[i][0])
 			}
@@ -244,7 +243,7 @@ app.get('/rule/:intention', function(req, res) {
 		}
 
 		var intentionList = [];
-		for (var i = 0; i < allResult.rows[0].length; i++) {
+		for (var i = 0; i < allResult.rows.length; i++) {
 			if (intentionList.indexOf(allResult.rows[i][0]) < 0) {
 				intentionList.push(allResult.rows[i][0])
 			}
@@ -336,7 +335,6 @@ app.post('/delete/:intention', function(req, res) {
 			res.redirect('/mode/' + intention);
 		});	
 	}
-	
 });
 
 
