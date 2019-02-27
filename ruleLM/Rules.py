@@ -141,7 +141,7 @@ class Model(object):
                 result.append(tuple(morph_tag.split('/')))
             return set(result)
         else:
-            return "NaN"
+            return None
 
     # DB 에서 DM 정보를 불러오는 함수
     ### DB 에 필요한 필드
@@ -165,40 +165,44 @@ class Model(object):
             sql = 'SELECT * FROM MZCB_INPUTS'
             cursor.execute(sql)
             intention_list = []
-            for row in cursor:
-                intention_list.append(row[1])
+            for inte, utt in cursor:
+                intention_list.append(inte)
             intention_set = list(set(intention_list))
 
             # 의도 목록 intention_set
             # 의도 목록을 기준으로 Rule과 Response를 정리함
             for intention in intention_set:
                 # 규칙 가져오기
-                rule_sql = 'SELECT * FROM MZCB_RULES WHERE INTENTION=%s'
-                nrows = cursor.execute(rule_sql, (intention))
-                if nrows == 0:
-                    continue
+                rule_sql = 'SELECT * FROM MZCB_RULES WHERE INTENTION=:inte'
+                cursor.execute(rule_sql, {'inte': intention})
 
-                rule_result = cursor.fetchone()
+                for inte, m1, m2, m3 in cursor:
+                    rule1 = self.str2obj(m1)
+                    rule2 = self.str2obj(m2)
+                    rule3 = self.str2obj(m3)
 
-                rule_temp = []
-                for col in rule_result:
-                    if col in ['Control_Car', 'FAQ', 'SmallTalk', intention]:
-                        continue
-
-                    rule = self.str2obj(col)
-                    if rule == "NaN":
-                        continue
-                    rule_temp.append(rule)
+                    rule_temp = [rule1, rule2, rule3]
 
                 # 규칙 가져오기 끝: 변수명 rule_temp
 
                 # 응답 가져오기
-                res_sql = 'SELECT * FROM MZCB_RESPONSE WHERE INTENTION=%s'
-                cursor.execute(res_sql, (intention))
+                res_sql = 'SELECT * FROM MZCB_RESPONSE WHERE INTENTION=:inte'
+                cursor.execute(res_sql, {'inte': intention})
 
                 res_temp = {}
                 for status_row in cursor:
                     res_temp[status_row[2]] = self.get_responseForm(status_row)
+
+                # column name and index matching
+                # domain            :   0
+                # intention         :   1
+                # chatbot_status    :   2
+                # response_type     :   3
+                # response_text     :   4
+                # response_object1  :   5
+                # response_object2  :   6
+                for inte, res in cursor:
+                    res_temp["200"] = self.get_responseForm(("FAQ", inte, '200', 'simpleText', res, None, None))
 
                 # 응답 가져오기 끝: 변수명 res_temp
 
