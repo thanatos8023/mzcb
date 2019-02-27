@@ -154,7 +154,8 @@ class Model(object):
                 cursor.execute(rule_sql, {'inte': intention})
 
                 row = cursor.fetchone()
-
+                
+                rule_temp = []
                 for row in cursor:
                     for col in row:
                         if col in ['Control_Car', 'FAQ', 'SmallTalk', intention]:
