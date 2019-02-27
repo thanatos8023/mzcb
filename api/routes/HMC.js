@@ -87,11 +87,11 @@ router.post('/message', function (req, res, next) {
         return resError
       }
 
-      console.log(resResult);
+      console.log(resResult.rows[0][1]);
 
       res.json({
         "type": "simpleText",
-        "text": resResult[0].RES_TEXT,
+        "text": resResult.rows[0][1],
         "object1": null,
         "object2": null,
       });
