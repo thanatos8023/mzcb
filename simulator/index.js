@@ -64,7 +64,8 @@ app.get('/mode', function (req, res) {
 	console.log('%%% Server log: /mode ROUTER');
 
 	// 기본적으로 도메인 목록은 무조건 전시해야함 
-	var sql = "SELECT * FROM MZCB_INPUTS";
+	//var sql = "SELECT * FROM MZCB_INPUTS";
+	var sql = "SELECT * FROM SEOULCB_INPUTS";
 	connection.execute(sql, function (allError, allResult, allNext) {
 		if (allError) { // DB 불러오기 에러
 			console.error("SERVER :: DB Connection : All Database reading connection error");
@@ -89,7 +90,8 @@ app.get('/mode/:intention', function (req, res) {
 	console.log('%%% Server log: /mode/' + intention + ' ROUTER');
 
 	// 기본적으로 도메인 목록은 무조건 전시해야함 
-	var sql = "SELECT * FROM MZCB_INPUTS";
+	//var sql = "SELECT * FROM MZCB_INPUTS";
+	var sql = "SELECT * FROM SEOULCB_INPUTS";
 	connection.execute(sql, function (allError, allResult, allNext) {
 		if (allError) { // DB 불러오기 에러
 			console.error("SERVER :: DB Connection : All Database reading connection error");
@@ -128,7 +130,8 @@ app.get('/response', function (req, res) {
 	console.log('%%% Server log: /response ROUTER');
 
 	// 기본적으로 도메인 목록은 무조건 전시해야함 
-	var sql = "SELECT * FROM MZCB_INPUTS";
+	//var sql = "SELECT * FROM MZCB_INPUTS";
+	var sql = "SELECT * FROM SEOULCB_INPUTS";
 	connection.execute(sql, function (allError, allResult, allNext) {
 		if (allError) { // DB 불러오기 에러
 			console.error("SERVER :: DB Connection : All Database reading connection error");
@@ -154,7 +157,8 @@ app.get('/response/:intention', function(req, res) {
 	var intention = req.params.intention;
 
 	// 기본적으로 도메인 목록은 무조건 전시해야함 
-	var sql = "SELECT * FROM MZCB_INPUTS";
+	//var sql = "SELECT * FROM MZCB_INPUTS";
+	var sql = "SELECT * FROM SEOULCB_INPUTS";
 	connection.execute(sql, function (allError, allResult, allNext) {
 		if (allError) { // DB 불러오기 에러
 			console.error("SERVER :: DB Connection : All Database reading connection error");
@@ -170,10 +174,12 @@ app.get('/response/:intention', function(req, res) {
 			}
 		}
 
-		var resSQL = "select * from MZCB_RESPONSE where INTENTION = :inte"
+		//var resSQL = "select * from MZCB_RESPONSE where INTENTION = :inte"
+		var resSQL = "select * from SEOULCB_RESPONSE where INTENTION = :inte"
 		connection.execute(resSQL, {inte: intention}, function (resErr, resResult) {
 			if (resErr) { // DB 불러오기 에러
-				console.error("SERVER :: DB Connection : MZCB_RESPONSE reading connection error");
+				//console.error("SERVER :: DB Connection : MZCB_RESPONSE reading connection error");
+				console.error("SERVER :: DB Connection : SEOULCB_RESPONSE reading connection error");
 				console.error(resErr);
 				res.end();
 				return resErr
@@ -194,7 +200,8 @@ app.get('/rule', function (req, res) {
 	console.log('%%% Server log: /response ROUTER');
 
 	// 기본적으로 도메인 목록은 무조건 전시해야함 
-	var sql = "SELECT * FROM MZCB_INPUTS";
+	//var sql = "SELECT * FROM MZCB_INPUTS";
+	var sql = "SELECT * FROM SEOULCB_INPUTS";
 	connection.execute(sql, function (allError, allResult, allNext) {
 		if (allError) { // DB 불러오기 에러
 			console.error("SERVER :: DB Connection : All Database reading connection error");
@@ -220,7 +227,8 @@ app.get('/rule/:intention', function(req, res) {
 	var intention = req.params.intention;
 
 	// 기본적으로 도메인 목록은 무조건 전시해야함 
-	var sql = "SELECT * FROM MZCB_INPUTS";
+	//var sql = "SELECT * FROM MZCB_INPUTS";
+	var sql = "SELECT * FROM SEOULCB_INPUTS";
 	connection.execute(sql, function (allError, allResult, allNext) {
 		if (allError) { // DB 불러오기 에러
 			console.error("SERVER :: DB Connection : All Database reading connection error");
@@ -237,7 +245,8 @@ app.get('/rule/:intention', function(req, res) {
 		}
 
 		// 정보 출력
-		ruleSQL = "select * from MZCB_RULES where INTENTION = :inte";
+		//ruleSQL = "select * from MZCB_RULES where INTENTION = :inte";
+		ruleSQL = "select * from SEOULCB_RULES where INTENTION = :inte";
 		connection.execute(ruleSQL, {inte: intention}, function (ruleErr, ruleResult, ruleNext) {
 			if (ruleErr) { // DB 불러오기 에러
 				console.error("SERVER :: DB Connection : Rule Database reading connection error");
@@ -266,7 +275,8 @@ app.post('/input/:intention', function(req, res) {
 	console.log("%%% Server log: /input/"+intention+" ROUTER");
 	console.log("New Input: " + newUserInput);
 
-	var sql = 'INSERT INTO MZCB_INPUTS (INTENTION, UTT) VALUES (:inte, :utt)';
+	//var sql = 'INSERT INTO MZCB_INPUTS (INTENTION, UTT) VALUES (:inte, :utt)';
+	var sql = 'INSERT INTO SEOULCB_INPUTS (INTENTION, UTT) VALUES (:inte, :utt)';
 	connection.execute(sql, {inte: intention, utt: newUserInput}, function(inErr, inResult, inFields){
 		if (inErr) {
 			console.error("SERVER :: DB CONNECTION ERROR :: insertion error");
@@ -291,7 +301,8 @@ app.post('/delete/:intention', function(req, res) {
 	console.log("Checked Utterance: " + checked_utt);
 
 	if (typeof(checked_utt) === typeof('string')) {
-		var sql = "DELETE FROM MZCB_INPUTS WHERE UTT=:utt";
+		//var sql = "DELETE FROM MZCB_INPUTS WHERE UTT=:utt";
+		var sql = "DELETE FROM SEOULCB_INPUTS WHERE UTT=:utt";
 		connection.execute(sql, {utt: checked_utt}, function(err, result, body) {
 			if (err) {
 				console.error("SERVER :: DB CONNECTION ERROR :: deletion error");
@@ -310,7 +321,8 @@ app.post('/delete/:intention', function(req, res) {
 		var utts = checked_utt.join();
 		utts = `(${utts})`;
 
-		var sql = "DELETE FROM tb_user_input WHERE user_input in " + utts;
+		//var sql = "DELETE FROM MZCB_INPUTS WHERE UTT in " + utts;
+		var sql = "DELETE FROM SEOULCB_INPUTS WHERE UTT in " + utts;
 		connection.execute(sql, function(err, result, body) {
 			if (err) {
 				console.error("SERVER :: DB CONNECTION ERROR :: deletion error");
@@ -335,7 +347,8 @@ app.post('/updateres/:intention', function (req, res) {
 	console.log("%%% Server log: /update"+intention+" ROUTER");
 	console.log("New Text: " + newText);
 
-	var udtSQL = "UPDATE MZCB_RESPONSE SET RES_TEXT = :resText WHERE INTENTION = :inte";
+	//var udtSQL = "UPDATE MZCB_RESPONSE SET RES_TEXT = :resText WHERE INTENTION = :inte";
+	var udtSQL = "UPDATE SEOULCB_RESPONSE SET RES_TEXT = :resText WHERE INTENTION = :inte";
 	connection.execute(udtSQL, {resText: newText, inte: intention}, function (udtErr, udtResult, udtField) {
 		if (udtErr) {
 			console.error("SERVER :: DB CONNECTION ERROR :: update error");
@@ -364,7 +377,8 @@ app.post('/updaterule/:intention', function (req, res) {
 	console.log("New Morph 2: " + newMorph2);
 	console.log("New Morph 3: " + newMorph3);
 
-	var udtSQL = "UPDATE MZCB_RULES SET  morph1 = :m1, morph2 = :m2, morph3 = :m3 WHERE intention = :inte"
+	//var udtSQL = "UPDATE MZCB_RULES SET  morph1 = :m1, morph2 = :m2, morph3 = :m3 WHERE intention = :inte"
+	var udtSQL = "UPDATE SEOULCB_RULES SET  morph1 = :m1, morph2 = :m2, morph3 = :m3 WHERE intention = :inte"
 	connection.query(udtSQL, {m1:newMorph1, m2:newMorph2, m3:newMorph3, inte:intention}, function (udtErr, udtResult, udtField) {
 		if (udtErr) {
 			console.error("SERVER :: DB CONNECTION ERROR :: update error");

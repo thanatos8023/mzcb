@@ -139,7 +139,8 @@ class Model(object):
             ## Intentions 채우기
             intentions = {}
             # 의도 목록이 필요함
-            sql = 'SELECT * FROM MZCB_INPUTS'
+            #sql = 'SELECT * FROM MZCB_INPUTS'
+            sql = 'SELECT * FROM SEOULCB_INPUTS'
             cursor.execute(sql)
             intention_list = []
             for inte, utt in cursor:
@@ -150,7 +151,8 @@ class Model(object):
             # 의도 목록을 기준으로 Rule과 Response를 정리함
             for intention in intention_set:
                 # 규칙 가져오기
-                rule_sql = 'SELECT * FROM MZCB_RULES WHERE INTENTION=:inte'
+                #rule_sql = 'SELECT * FROM MZCB_RULES WHERE INTENTION=:inte'
+                rule_sql = 'SELECT * FROM SEOULCB_RULES WHERE INTENTION=:inte'
                 cursor.execute(rule_sql, {'inte': intention})
 
                 rule_temp = []
@@ -167,7 +169,8 @@ class Model(object):
                 # 규칙 가져오기 끝: 변수명 rule_temp
 
                 # 응답 가져오기
-                res_sql = 'SELECT * FROM MZCB_RESPONSE WHERE INTENTION=:inte'
+                #res_sql = 'SELECT * FROM MZCB_RESPONSE WHERE INTENTION=:inte'
+                res_sql = 'SELECT * FROM SEOULCB_RESPONSE WHERE INTENTION=:inte'
                 cursor.execute(res_sql, {'inte': intention})
 
                 res_temp = {}
@@ -251,7 +254,8 @@ class Model(object):
         )
 
         with connection.cursor() as cur:
-            sql = 'SELECT * FROM MZCB_INPUTS'
+            #sql = 'SELECT * FROM MZCB_INPUTS'
+            sql = 'SELECT * FROM SEOULCB_INPUTS'
             cur.execute(sql)
 
             for inte, utt in cur:
