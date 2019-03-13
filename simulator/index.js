@@ -337,7 +337,7 @@ app.post('/updateres', function (req, res) {
 	//console.log(req.body);
 	var newText = req.body.newText;
 
-	console.log("%%% Server log: /update"+intention+" ROUTER");
+	console.log("%%% Server log ::  " + intention);
 	console.log("New Text: " + newText);
 
 	//var udtSQL = "UPDATE MZCB_RESPONSE SET RES_TEXT = :resText WHERE INTENTION = :inte";
@@ -346,12 +346,12 @@ app.post('/updateres', function (req, res) {
 		if (udtErr) {
 			console.error("SERVER :: DB CONNECTION ERROR :: update error");
 			console.error(udtErr);
-			res.end();
-			return udtErr
+			res.alert('입력 에러!')
+			res.redirect('/response?domain='+domain+'&subdomain='+subdomain);
 		}
 
 		console.log("%%% Server log: /updateres ROUTER :: Successfully Update [" + intention + "]  response in DB.");
-		res.redirect('/response/' + intention);
+		res.redirect('/response?domain='+domain+'&subdomain='+subdomain);
 	});
 });
 
