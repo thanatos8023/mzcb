@@ -273,7 +273,7 @@ app.post('/input', function(req, res) {
 		}
 
 		console.log("%%% Server log: New information Successfully added in DB.");
-		res.redirect('/mode/' + intention);
+		res.redirect('/mode?domain='+domain+'&subdomain='+subdomain);
 	});
 });
 
@@ -301,7 +301,7 @@ app.post('/delete', function(req, res) {
 				return err
 			}
 			console.log("%%% Server log: /delete ROUTER :: Successfully delete [" + checked_utt + "] in DB.");
-			res.redirect('/mode/' + intention);
+			res.redirect('/mode?domain='+domain+'&subdomain='+subdomain);
 		});	
 	}
 	else {
@@ -321,7 +321,7 @@ app.post('/delete', function(req, res) {
 				return err
 			}
 			console.log("%%% Server log: /delete ROUTER :: Successfully delete [" + checked_utt + "] in DB.");
-			res.redirect('/mode/' + intention);
+			res.redirect('/mode?domain='+domain+'&subdomain='+subdomain);
 		});	
 	}
 });
@@ -384,6 +384,6 @@ app.post('/updaterule', function (req, res) {
 		}
 
 		console.log("%%% Server log: /updaterule ROUTER :: Successfully Update [" + intention + "]  rule in DB.");
-		res.redirect('/rule/' + intention);
+		res.redirect('/rule?domain='+domain+'&subdomain='+subdomain);
 	});
 });
