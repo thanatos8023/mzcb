@@ -375,7 +375,7 @@ app.post('/updaterule', function (req, res) {
 
 	//var udtSQL = "UPDATE MZCB_RULES SET  morph1 = :m1, morph2 = :m2, morph3 = :m3 WHERE intention = :inte"
 	var udtSQL = "UPDATE SEOULCB_RULES SET  morph1 = :m1, morph2 = :m2, morph3 = :m3 WHERE intention = :inte"
-	connection.query(udtSQL, {m1:newMorph1, m2:newMorph2, m3:newMorph3, inte:intention}, function (udtErr, udtResult, udtField) {
+	connection.execute(udtSQL, {m1:newMorph1, m2:newMorph2, m3:newMorph3, inte:intention}, function (udtErr, udtResult, udtField) {
 		if (udtErr) {
 			console.error("SERVER :: DB CONNECTION ERROR :: update error");
 			console.error(udtErr);
