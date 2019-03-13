@@ -107,7 +107,7 @@ app.get('/mode', function (req, res) {
 			
 			for (var i = 0; i < allResult.rows.length; i++) {
 				if (allResult.rows[i][2] === intention) {
-					uttList.append(allResult.rows[i][3]);
+					uttList.push(allResult.rows[i][3]);
 				}
 			}
 		}
