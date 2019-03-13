@@ -63,9 +63,12 @@ app.post('/deleteview', function (req, res) {
 app.get('/mode', function (req, res) {
 	console.log('%%% Server log: /mode ROUTER');
 
-	// 기본적으로 도메인 목록은 무조건 전시해야함 
-	//var sql = "SELECT * FROM MZCB_INPUTS";
-	var sql = "SELECT * FROM SEOULCB_INPUTS";
+	var domain = req.query.domain;
+	var subdomain = req.query.subdomain;
+
+	var intention = domain + "_" + subdomain;
+
+	var sql = "select * from SEOULCB_INPUTS";
 	connection.execute(sql, function (allError, allResult, allNext) {
 		if (allError) { // DB 불러오기 에러
 			console.error("SERVER :: DB Connection : All Database reading connection error");
@@ -74,14 +77,45 @@ app.get('/mode', function (req, res) {
 			return allError
 		}
 
-		var intentionList = [];
+		// Input table columns 
+		// DOMAIN, SUBDOMAIN, INTENTION, UTT
+
+		// 도메인 목록
+		// 좌측 메뉴에 전시하기 위한 객체 
+		var domainList = [];
 		for (var i = 0; i < allResult.rows.length; i++) {
-			if (intentionList.indexOf(allResult.rows[i][0]) < 0) {
-				intentionList.push(allResult.rows[i][0])
+			if (domainList.indexOf(allResult.rows[i][0]) < 0) {
+				domainList.push(allResult.rows[i][0]);
 			}
 		}
 
-		res.render('input', {intList: intentionList});
+		var menuList = [];
+		for (var i = 0; i < domainList.length; i++) {
+			// domain = domainList[i]
+			// Searching on allResult
+			var temp = [];
+			for (var j = 0; j < allResult.rows.length; j++) {
+				if (allResult.rows[j][0] === domainList[i]) {
+					temp.push(allResult.rows[j][1]);
+				}
+			}
+			menuList.push([domainList[i], temp]);
+		}
+
+		var uttList = [];
+		if (intention.indexOf('null') < 0) {
+			
+			for (var i = 0; i < allResult.rows.length; i++) {
+				if (allResult.rows[i][2] === intention) {
+					uttList.append(allResult.rows[i][3]);
+				}
+			}
+		}
+
+		res.render('input', {
+			menuList: menuList,
+			uttList: uttList
+		});
 	});
 });
 

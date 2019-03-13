@@ -13,21 +13,19 @@ html
 					h1 Chatbot Simulator
 				div.sub
 					ul
-						each intention in intList
-							if nowIntention==intention
-								li.active
-									a(href='/mode/#{intention}')= intention
-							else
-								li
-									a(href='/mode/#{intention}')= intention
+						each menu in menuList
+							ul= menu[0]
+								each sub in menu[1]
+									li
+										a(href='/mode/?domain=#{menu[0]}&subdomain=#{sub}')= sub
 			div.wrap-right
 				div.gnb
-					a(href="/mode/#{nowIntention}" class="on") Manage Input
-					a(href="/response/#{nowIntention}") Manage Response
-					a(href="/rule/#{nowIntention}") Manage Rule
+					a(href="/mode" class="on") Manage Input
+					a(href="/response") Manage Response
+					a(href="/rule") Manage Rule
 				div._contents
 					div.box
-						form(action='/input/#{nowIntention}' method='post' id='insertform')
+						form(action='/input' method='post' id='insertform')
 							div.user-input
 								label(for="la01") User Input
 								input(type="text" id="la01" name="newUserInput")
@@ -37,9 +35,9 @@ html
 									i.icon-trash 
 						form(action='/delete/#{nowIntention}' method='post' id='deleteform')
 							div.user-list
-								if inputList
+								if uttList
 									ul
-									each utt in inputList
+									each utt in uttList
 										li
 											input(type="checkbox" name="checked_utt" value=utt)
 											label= utt
