@@ -24,7 +24,7 @@ html
 					a(href="/mode?domain=#{nowPage[0]}&subdomain=#{nowPage[1]}") Manage Input
 					a(href="/response?domain=#{nowPage[0]}&subdomain=#{nowPage[1]}" class="on") Manage Response
 					a(href="/rule?domain=#{nowPage[0]}&subdomain=#{nowPage[1]}") Manage Rule
-				form(action='/updateres/?domain=#{nowPage[0]}&subdomain=#{nowPage[1]}' method='post' id='updateresform')
+				form(action='/updateres?domain=#{nowPage[0]}&subdomain=#{nowPage[1]}' method='post' id='updateresform')
 					div._contents
 						div.box
 							div(class="_top text-right")

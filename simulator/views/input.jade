@@ -26,7 +26,7 @@ html
 					a(href="/rule?domain=#{nowPage[0]}&subdomain=#{nowPage[1]}") Manage Rule
 				div._contents
 					div.box
-						form(action='/input' method='post' id='insertform')
+						form(action='/input?domain=#{nowPage[0]}&subdomain=#{nowPage[1]}' method='post' id='insertform')
 							div.user-input
 								label(for="la01") User Input
 								input(type="text" id="la01" name="newUserInput")
