@@ -240,7 +240,7 @@ app.get('/rule', function (req, res) {
 			}
 		}
 
-		res.render('output', {
+		res.render('rule', {
 			menuList: menuList,
 			morph1: morph1,
 			morph2: morph2,
