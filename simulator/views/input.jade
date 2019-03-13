@@ -21,9 +21,9 @@ html
 								a(href='/mode/?domain=#{menu[0]}&subdomain=#{sub}')= sub
 			div.wrap-right
 				div.gnb
-					a(href="/mode" class="on") Manage Input
-					a(href="/response") Manage Response
-					a(href="/rule") Manage Rule
+					a(href="/mode?domain=#{nowPage[0]}&subdomain=#{nowPage[1]}" class="on") Manage Input
+					a(href="/response?domain=#{nowPage[0]}&subdomain=#{nowPage[1]}") Manage Response
+					a(href="/rule?domain=#{nowPage[0]}&subdomain=#{nowPage[1]}") Manage Rule
 				div._contents
 					div.box
 						form(action='/input' method='post' id='insertform')
@@ -34,7 +34,7 @@ html
 									i.icon-plus 
 								button(type="submit" class="button gray" value="la01" form="deleteform") 삭제
 									i.icon-trash 
-						form(action='/delete/#{nowIntention}' method='post' id='deleteform')
+						form(action='/delete?domain=#{nowPage[0]}&subdomain=#{nowPage[1]}' method='post' id='deleteform')
 							div.user-list
 								if uttList
 									ul

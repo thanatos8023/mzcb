@@ -13,19 +13,18 @@ html
 					h1 Chatbot Simulator
 				div.sub
 					ul
-						each intention in intList
-							if nowIntention==intention
-								li.active
-									a(href='/response/#{intention}')= intention
-							else
-								li
-									a(href='/response/#{intention}')= intention
+					each menu in menuList
+						ul
+						label= menu[0]
+						each sub in menu[1]
+							li
+								a(href='/mode/?domain=#{menu[0]}&subdomain=#{sub}')= sub
 			div.wrap-right
 				div.gnb
-					a(href="/mode/#{nowIntention}") Manage Input
-					a(href="/response/#{nowIntention}" class="on") Manage Response
-					a(href="/rule/#{nowIntention}") Manage Rule
-				form(action='/updateres/#{nowIntention}' method='post' id='updateresform')
+					a(href="/mode?domain=#{nowPage[0]}&subdomain=#{nowPage[1]}") Manage Input
+					a(href="/response?domain=#{nowPage[0]}&subdomain=#{nowPage[1]}" class="on") Manage Response
+					a(href="/rule?domain=#{nowPage[0]}&subdomain=#{nowPage[1]}") Manage Rule
+				form(action='/updateres/?domain=#{nowPage[0]}&subdomain=#{nowPage[1]}' method='post' id='updateresform')
 					div._contents
 						div.box
 							div(class="_top text-right")

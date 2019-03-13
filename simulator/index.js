@@ -114,47 +114,8 @@ app.get('/mode', function (req, res) {
 
 		res.render('input', {
 			menuList: menuList,
-			uttList: uttList
-		});
-	});
-});
-
-app.get('/mode/:intention', function (req, res) {
-	var intention = req.params.intention;
-	console.log('%%% Server log: /mode/' + intention + ' ROUTER');
-
-	// 기본적으로 도메인 목록은 무조건 전시해야함 
-	//var sql = "SELECT * FROM MZCB_INPUTS";
-	var sql = "SELECT * FROM SEOULCB_INPUTS";
-	connection.execute(sql, function (allError, allResult, allNext) {
-		if (allError) { // DB 불러오기 에러
-			console.error("SERVER :: DB Connection : All Database reading connection error");
-			console.error(allError);
-			res.end();
-			return allError
-		}
-
-		var intentionList = [];
-		var inList = [];
-		for (var i = 0; i < allResult.rows.length; i++) {
-			if (intentionList.indexOf(allResult.rows[i][0]) < 0) {
-				intentionList.push(allResult.rows[i][0])
-			}
-
-			if (allResult.rows[i][0] == intention) {
-				inList.push(allResult.rows[i][1]);
-			}
-		}
-
-		console.log("SERVER :: Number of Intention :: " + intentionList.length);
-
-		// 정보 출력
-		console.log("List of utterances: ", inList);
-
-		res.render('input', {
-			nowIntention: intention,
-			intList: intentionList,
-			inputList: inList
+			uttList: uttList,
+			nowPage: [domain, subdomain]
 		});
 	});
 });
@@ -163,32 +124,10 @@ app.get('/mode/:intention', function (req, res) {
 app.get('/response', function (req, res) {
 	console.log('%%% Server log: /response ROUTER');
 
-	// 기본적으로 도메인 목록은 무조건 전시해야함 
-	//var sql = "SELECT * FROM MZCB_INPUTS";
-	var sql = "SELECT * FROM SEOULCB_INPUTS";
-	connection.execute(sql, function (allError, allResult, allNext) {
-		if (allError) { // DB 불러오기 에러
-			console.error("SERVER :: DB Connection : All Database reading connection error");
-			console.error(allError);
-			res.end();
-			return allError
-		}
+	var domain = req.query.domain;
+	var subdomain = req.query.subdomain;
 
-		var intentionList = [];
-		for (var i = 0; i < allResult.rows.length; i++) {
-			if (intentionList.indexOf(allResult.rows[i][0]) < 0) {
-				intentionList.push(allResult.rows[i][0])
-			}
-		}
-
-		res.render('output', {intList: intentionList});
-	});
-});
-
-app.get('/response/:intention', function(req, res) {
-	console.log('%%% Server log: /response ROUTER');
-
-	var intention = req.params.intention;
+	var intention = domain + "_" + subdomain;
 
 	// 기본적으로 도메인 목록은 무조건 전시해야함 
 	//var sql = "SELECT * FROM MZCB_INPUTS";
@@ -201,30 +140,44 @@ app.get('/response/:intention', function(req, res) {
 			return allError
 		}
 
-		var intentionList = [];
+		// Input table columns 
+		// DOMAIN, SUBDOMAIN, INTENTION, UTT
+
+		// 도메인 목록
+		// 좌측 메뉴에 전시하기 위한 객체 
+		var domainList = [];
 		for (var i = 0; i < allResult.rows.length; i++) {
-			if (intentionList.indexOf(allResult.rows[i][0]) < 0) {
-				intentionList.push(allResult.rows[i][0])
+			if (domainList.indexOf(allResult.rows[i][0]) < 0) {
+				domainList.push(allResult.rows[i][0]);
 			}
 		}
 
-		//var resSQL = "select * from MZCB_RESPONSE where INTENTION = :inte"
-		var resSQL = "select * from SEOULCB_RESPONSE where INTENTION = :inte"
-		connection.execute(resSQL, {inte: intention}, function (resErr, resResult) {
-			if (resErr) { // DB 불러오기 에러
-				//console.error("SERVER :: DB Connection : MZCB_RESPONSE reading connection error");
-				console.error("SERVER :: DB Connection : SEOULCB_RESPONSE reading connection error");
-				console.error(resErr);
-				res.end();
-				return resErr
+		var menuList = [];
+		for (var i = 0; i < domainList.length; i++) {
+			// domain = domainList[i]
+			// Searching on allResult
+			var temp = [];
+			for (var j = 0; j < allResult.rows.length; j++) {
+				if (allResult.rows[j][0] === domainList[i]) {
+					temp.push(allResult.rows[j][1]);
+				}
 			}
+			menuList.push([domainList[i], temp]);
+		}
 
-			// 정보 출력
-			res.render('output', {
-				intList: intentionList,
-				nowIntention: intention,
-				resText: resResult.rows[0][1]
-			});
+		var resText = '';
+		if (intention.indexOf('null') < 0) {
+			for (var i = 0; i < allResult.rows.length; i++) {
+				if (allResult.rows[i][2] === intention) {
+					resText = allResult.rows[i][3];
+				}
+			}
+		}
+
+		res.render('output', {
+			menuList: menuList,
+			resText: resText,
+			nowPage: [domain, subdomain]
 		});
 	});
 });
@@ -233,32 +186,10 @@ app.get('/response/:intention', function(req, res) {
 app.get('/rule', function (req, res) {
 	console.log('%%% Server log: /response ROUTER');
 
-	// 기본적으로 도메인 목록은 무조건 전시해야함 
-	//var sql = "SELECT * FROM MZCB_INPUTS";
-	var sql = "SELECT * FROM SEOULCB_INPUTS";
-	connection.execute(sql, function (allError, allResult, allNext) {
-		if (allError) { // DB 불러오기 에러
-			console.error("SERVER :: DB Connection : All Database reading connection error");
-			console.error(allError);
-			res.end();
-			return allError
-		}
+	var domain = req.query.domain;
+	var subdomain = req.query.subdomain;
 
-		var intentionList = [];
-		for (var i = 0; i < allResult.rows.length; i++) {
-			if (intentionList.indexOf(allResult.rows[i][0]) < 0) {
-				intentionList.push(allResult.rows[i][0])
-			}
-		}
-
-		res.render('rule', {intList: intentionList});
-	});
-});
-
-app.get('/rule/:intention', function(req, res) {
-	console.log('%%% Server log: /rule ROUTER');
-
-	var intention = req.params.intention;
+	var intention = domain + "_" + subdomain;
 
 	// 기본적으로 도메인 목록은 무조건 전시해야함 
 	//var sql = "SELECT * FROM MZCB_INPUTS";
@@ -271,38 +202,60 @@ app.get('/rule/:intention', function(req, res) {
 			return allError
 		}
 
-		var intentionList = [];
+		// Input table columns 
+		// DOMAIN, SUBDOMAIN, INTENTION, UTT
+
+		// 도메인 목록
+		// 좌측 메뉴에 전시하기 위한 객체 
+		var domainList = [];
 		for (var i = 0; i < allResult.rows.length; i++) {
-			if (intentionList.indexOf(allResult.rows[i][0]) < 0) {
-				intentionList.push(allResult.rows[i][0])
+			if (domainList.indexOf(allResult.rows[i][0]) < 0) {
+				domainList.push(allResult.rows[i][0]);
 			}
 		}
 
-		// 정보 출력
-		//ruleSQL = "select * from MZCB_RULES where INTENTION = :inte";
-		ruleSQL = "select * from SEOULCB_RULES where INTENTION = :inte";
-		connection.execute(ruleSQL, {inte: intention}, function (ruleErr, ruleResult, ruleNext) {
-			if (ruleErr) { // DB 불러오기 에러
-				console.error("SERVER :: DB Connection : Rule Database reading connection error");
-				console.error(ruleErr);
-				res.end();
-				return ruleErr
+		var menuList = [];
+		for (var i = 0; i < domainList.length; i++) {
+			// domain = domainList[i]
+			// Searching on allResult
+			var temp = [];
+			for (var j = 0; j < allResult.rows.length; j++) {
+				if (allResult.rows[j][0] === domainList[i]) {
+					temp.push(allResult.rows[j][1]);
+				}
 			}
+			menuList.push([domainList[i], temp]);
+		}
 
-			res.render('rule', {
-				intList: intentionList,
-				nowIntention: intention,
-				morph1: ruleResult.rows[0][1],
-				morph2: ruleResult.rows[0][2],
-				morph3: ruleResult.rows[0][3]
-			});
+		var morph1 = '';
+		var morph2 = '';
+		var morph3 = '';
+		if (intention.indexOf('null') < 0) {
+			for (var i = 0; i < allResult.rows.length; i++) {
+				if (allResult.rows[i][2] === intention) {
+					morph1 = allResult.rows[i][3];
+					morph2 = allResult.rows[i][4];
+					morph3 = allResult.rows[i][5];
+				}
+			}
+		}
+
+		res.render('output', {
+			menuList: menuList,
+			morph1: morph1,
+			morph2: morph2,
+			morph3: morph3,
+			nowPage: [domain, subdomain]
 		});
 	});
 });
 
 // Input Utterance in DB
-app.post('/input/:intention', function(req, res) {
-	var intention = req.params.intention;
+app.post('/input', function(req, res) {
+	var domain = req.query.domain;
+	var subdomain = req.query.subdomain;
+
+	var intention = domain + "_" + subdomain;
 
 	var newUserInput = req.body.newUserInput;
 
@@ -326,8 +279,11 @@ app.post('/input/:intention', function(req, res) {
 
 
 // Delete Utterance in DB
-app.post('/delete/:intention', function(req, res) {
-	var intention = req.params.intention;
+app.post('/delete', function(req, res) {
+	var domain = req.query.domain;
+	var subdomain = req.query.subdomain;
+
+	var intention = domain + "_" + subdomain;
 
 	var checked_utt = req.body.checked_utt;
 
@@ -372,8 +328,11 @@ app.post('/delete/:intention', function(req, res) {
 
 
 // Update response
-app.post('/updateres/:intention', function (req, res) {
-	var intention = req.params.intention;
+app.post('/updateres', function (req, res) {
+	var domain = req.query.domain;
+	var subdomain = req.query.subdomain;
+
+	var intention = domain + "_" + subdomain;
 
 	//console.log(req.body);
 	var newText = req.body.newText;
@@ -398,8 +357,11 @@ app.post('/updateres/:intention', function (req, res) {
 
 
 // Update rule
-app.post('/updaterule/:intention', function (req, res) {
-	var intention = req.params.intention;
+app.post('/updaterule', function (req, res) {
+	var domain = req.query.domain;
+	var subdomain = req.query.subdomain;
+
+	var intention = domain + "_" + subdomain;
 
 	//console.log(req.body);
 	var newMorph1 = req.body.newmorph1;
