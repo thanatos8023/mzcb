@@ -131,7 +131,7 @@ app.get('/response', function (req, res) {
 
 	// 기본적으로 도메인 목록은 무조건 전시해야함 
 	//var sql = "SELECT * FROM MZCB_INPUTS";
-	var sql = "SELECT * FROM SEOULCB_INPUTS";
+	var sql = "SELECT * FROM SEOULCB_RESPONSE";
 	connection.execute(sql, function (allError, allResult, allNext) {
 		if (allError) { // DB 불러오기 에러
 			console.error("SERVER :: DB Connection : All Database reading connection error");
@@ -193,7 +193,7 @@ app.get('/rule', function (req, res) {
 
 	// 기본적으로 도메인 목록은 무조건 전시해야함 
 	//var sql = "SELECT * FROM MZCB_INPUTS";
-	var sql = "SELECT * FROM SEOULCB_INPUTS";
+	var sql = "SELECT * FROM SEOULCB_RULES";
 	connection.execute(sql, function (allError, allResult, allNext) {
 		if (allError) { // DB 불러오기 에러
 			console.error("SERVER :: DB Connection : All Database reading connection error");
