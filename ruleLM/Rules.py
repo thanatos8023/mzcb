@@ -152,7 +152,7 @@ class Model(object):
             sql = 'SELECT * FROM SEOULCB_INPUTS'
             cursor.execute(sql)
             intention_list = []
-            for inte, utt in cursor:
+            for dom, subdom, inte, utt in cursor:
                 intention_list.append(inte)
             intention_set = list(set(intention_list))
 
@@ -164,12 +164,12 @@ class Model(object):
                 rule_sql = 'SELECT * FROM SEOULCB_RULES WHERE INTENTION=:inte'
                 cursor.execute(rule_sql, {'inte': intention})
 
-                for row in cursor:
-                    if not row[3]:
+                for dom, subdom, inte, r in cursor:
+                    if not r:
                         rule = [{()}]
                         break
                     else:
-                        rule = self.str2obj(row[3])
+                        rule = self.str2obj(r)
 
                 # 규칙 가져오기 끝: 변수명 rule_temp
 
@@ -187,7 +187,7 @@ class Model(object):
                 # response_text     :   4
                 # response_object1  :   5
                 # response_object2  :   6
-                for inte, res in cursor:
+                for dom, subdom, inte, res in cursor:
                     res_temp["200"] = self.get_responseForm(("FAQ", inte, '200', 'simpleText', res, 'NaN', 'NaN'))
 
                 # 응답 가져오기 끝: 변수명 res_temp
