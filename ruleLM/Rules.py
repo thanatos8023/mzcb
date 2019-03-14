@@ -236,6 +236,9 @@ class Model(object):
         for key in self.dm['Intentions'].keys():
             matched_case = 0
             for necset in self.dm['Intentions'][key]['Rule']:
+                if key == "행정_우면산 터널 통행료":
+                    print(necset)
+
                 # There are set of morphs
                 matched = necset & set(self.pos)
                 if not matched:
