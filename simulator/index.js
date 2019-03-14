@@ -227,24 +227,18 @@ app.get('/rule', function (req, res) {
 			menuList.push([domainList[i], temp]);
 		}
 
-		var morph1 = '';
-		var morph2 = '';
-		var morph3 = '';
+		var morph = '';
 		if (intention.indexOf('null') < 0) {
 			for (var i = 0; i < allResult.rows.length; i++) {
 				if (allResult.rows[i][2] === intention) {
-					morph1 = allResult.rows[i][3];
-					morph2 = allResult.rows[i][4];
-					morph3 = allResult.rows[i][5];
+					morph = allResult.rows[i][3];
 				}
 			}
 		}
 
 		res.render('rule', {
 			menuList: menuList,
-			morph1: morph1,
-			morph2: morph2,
-			morph3: morph3,
+			morph: morph,
 			nowPage: [domain, subdomain]
 		});
 	});
@@ -364,18 +358,14 @@ app.post('/updaterule', function (req, res) {
 	var intention = domain + "_" + subdomain;
 
 	//console.log(req.body);
-	var newMorph1 = req.body.newmorph1;
-	var newMorph2 = req.body.newmorph2;
-	var newMorph3 = req.body.newmorph3;
+	var newMorph = req.body.newmorph;
 
 	console.log("%%% Server log: /updaterule"+intention+" ROUTER");
-	console.log("New Morph 1: " + newMorph1);
-	console.log("New Morph 2: " + newMorph2);
-	console.log("New Morph 3: " + newMorph3);
+	console.log("New Morph : " + newMorph);
 
 	//var udtSQL = "UPDATE MZCB_RULES SET  morph1 = :m1, morph2 = :m2, morph3 = :m3 WHERE intention = :inte"
-	var udtSQL = "UPDATE SEOULCB_RULES SET  morph1 = :m1, morph2 = :m2, morph3 = :m3 WHERE intention = :inte"
-	connection.execute(udtSQL, {m1:newMorph1, m2:newMorph2, m3:newMorph3, inte:intention}, function (udtErr, udtResult, udtField) {
+	var udtSQL = "UPDATE SEOULCB_RULES SET  morph = :m WHERE intention = :inte"
+	connection.execute(udtSQL, {m:newMorph, inte:intention}, function (udtErr, udtResult, udtField) {
 		if (udtErr) {
 			console.error("SERVER :: DB CONNECTION ERROR :: update error");
 			console.error(udtErr);

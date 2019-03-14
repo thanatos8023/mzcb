@@ -108,15 +108,24 @@ class Model(object):
         return responseForm
 
     def str2obj(self, rulestr):
-        # string: ooo/NNN,qqq/SSS
-        # object: {('ooo', 'NNN'), ('qqq', 'SSS')}
+        # string: ooo/NNN,qqq/SSS|aaa/DD,bbb/DE,...
+        # object: [[('ooo', 'NNN'), ('qqq', 'SSS')], [('aaa', 'DD'), ('bbb', 'DE'), ...], ...]
         if not rulestr is None:
-            splitted_morph = rulestr.split(',')
-
             result = []
-            for morph_tag in splitted_morph:
-                result.append(tuple(morph_tag.split('/')))
-            return set(result)
+
+            splitted_nes = rulestr.split('|') # splitted_nes: ['ooo/NNN,qqq/SSS', 'aaa/DD,bbb/DE,...', ...]
+            for morphstr in splitted_nes:
+                splitted_morph = morphstr.split(',') # splitted_morph: ['ooo/NNN', 'qqq/SSS']
+
+                morphlist = []
+                for morph_tag in splitted_morph:
+                    morphlist.append(tuple(morph_tag.split('/')))
+
+            # morphlist: [('ooo', 'NNN'), ('qqq', 'SSS')]
+            result.append(set(morphlist))
+
+            # result: [{('ooo', 'NNN'), ('qqq', 'SSS')}, {('aaa', 'DD'), ('bbb', 'DE'), ...}, ...]
+            return result 
         else:
             return "NaN"
 
@@ -155,16 +164,12 @@ class Model(object):
                 rule_sql = 'SELECT * FROM SEOULCB_RULES WHERE INTENTION=:inte'
                 cursor.execute(rule_sql, {'inte': intention})
 
-                rule_temp = []
                 for row in cursor:
-                    for col in row:
-                        if col in ['Control_Car', 'FAQ', 'SmallTalk', intention]:
-                            continue
-
-                        rule = self.str2obj(col)
-                        if rule == "NaN":
-                            continue
-                        rule_temp.append(rule)
+                    if not row[3]:
+                        rule = [{()}]
+                        break
+                    else:
+                        rule = self.str2obj(row[3])
 
                 # 규칙 가져오기 끝: 변수명 rule_temp
 
@@ -189,7 +194,7 @@ class Model(object):
 
                 # 의도 채우기
                 intentions[intention] = {
-                    'Rule': rule_temp,
+                    'Rule': rule,
                     'Response': res_temp
                 }
 
