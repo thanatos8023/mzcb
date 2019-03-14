@@ -78,6 +78,15 @@ router.post('/message', function (req, res, next) {
     console.log("user command : " + object.content);
     console.log("user intention: " + intention);
 
+    if (intention === 'Fail') {
+      res.json({
+        "type": "simpleText",
+        "text": "죄송합니다. 제가 잘 이해하지 못했습니다.",
+        "object1": null,
+        "object2": null,
+      });
+    }
+
     //var resSQL = "select * from MZCB_RESPONSE where INTENTION = :inte"
     var resSQL = "select * from SEOULCB_RESPONSE where INTENTION = :inte"
     connection.execute(resSQL, {inte: intention}, function (resError, resResult, body) {
@@ -89,11 +98,11 @@ router.post('/message', function (req, res, next) {
         return resError
       }
 
-      console.log(resResult.rows[0]);
+      console.log(resResult.rows[0][3]);
 
       res.json({
         "type": "simpleText",
-        "text": resResult.rows[0],
+        "text": resResult.rows[0][3],
         "object1": null,
         "object2": null,
       });
