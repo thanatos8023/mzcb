@@ -49,7 +49,7 @@ function get_intention(object, callback) {
     // LM이 주는 결과값은 response.body로 나오거든
     var intention = nluResponse.body;
 
-    if (intention.indexOf("FAQ") == -1 || intention == null) {
+    if (intention == null) {
       intention = "Fail"
     }
 
