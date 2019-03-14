@@ -263,7 +263,7 @@ class Model(object):
             sql = 'SELECT * FROM SEOULCB_INPUTS'
             cur.execute(sql)
 
-            for inte, utt in cur:
+            for dom, subdom, inte, utt in cur:
                 if self.utt == utt:
                     return inte
 
