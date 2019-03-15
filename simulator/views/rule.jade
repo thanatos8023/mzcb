@@ -15,16 +15,15 @@ html
 			div.wrap-left
 				div.sub
 					ul
-					each menu in menuList
-						ul
-						label= menu[0]
-						each sub in menu[1]
-							if sub == nowPage[1]
-								li.active
-									a(href='/rule?domain=#{menu[0]}&subdomain=#{sub}')= sub
-							else
-								li
-									a(href='/rule?domain=#{menu[0]}&subdomain=#{sub}')= sub
+						each menu in menuList
+							label= menu[0]
+							each sub in menu[1]
+								if sub == nowPage[1]
+									li.active
+										a(href='/rule?domain=#{menu[0]}&subdomain=#{sub}')= sub
+								else
+									li
+										a(href='/rule?domain=#{menu[0]}&subdomain=#{sub}')= sub
 			div.wrap-right
 				div.gnb
 					a(href="/mode?domain=#{nowPage[0]}&subdomain=#{nowPage[1]}") Manage Input
