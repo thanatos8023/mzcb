@@ -36,9 +36,9 @@ html
 							div.user-input
 								label(for="la01") User Input
 								input#la01(type="text" name="newUserInput")
-								button(type="submit" class="button blue" value="la01" form="insertform") 추가
+								button(type="submit" class="button blue" value="la01" form="insertform")
 									i.icon-plus 
-								button(type="submit" class="button gray" value="la01" form="deleteform") 삭제
+								button(type="submit" class="button gray" value="la01" form="deleteform")
 									i.icon-trash 
 						form(action='/delete?domain=#{nowPage[0]}&subdomain=#{nowPage[1]}' method='post' id='deleteform')
 							div.user-list
