@@ -8,32 +8,36 @@ html
 		link(rel="stylesheet" href="/css/style.css")
 	body
 		div#wrap
-			div.wrap-left
+			div.wrap_header
 				div._title
-					h1 Chatbot Simulator
+					h1
+						img(src="/images/logo.png")
+			div.wrap-left
 				div.sub
 					ul
 					each menu in menuList
 						ul
 						label= menu[0]
 						each sub in menu[1]
-							li
-								a(href='/response?domain=#{menu[0]}&subdomain=#{sub}')= sub
+							if nowPage[1] == sub
+								li.active
+									a(href='/response?domain=#{menu[0]}&subdomain=#{sub}')= sub
+							else
+								li
+									a(href='/response?domain=#{menu[0]}&subdomain=#{sub}')= sub
 			div.wrap-right
 				div.gnb
 					a(href="/mode?domain=#{nowPage[0]}&subdomain=#{nowPage[1]}") Manage Input
-					a(href="/response?domain=#{nowPage[0]}&subdomain=#{nowPage[1]}" class="on") Manage Response
+					a.on(href="/response?domain=#{nowPage[0]}&subdomain=#{nowPage[1]}") Manage Response
 					a(href="/rule?domain=#{nowPage[0]}&subdomain=#{nowPage[1]}") Manage Rule
 				form(action='/updateres?domain=#{nowPage[0]}&subdomain=#{nowPage[1]}' method='post' id='updateresform')
 					div._contents
+						h2 Manage Response
+						button(type="submit" class="button gray2 float-right")
+							i.icon_modify
 						div.box
-							div(class="_top text-right")
-								button(type="submit" class="button mint" form="updateresform") 수정
-									i.icon-modify
-									
 							div(class="basic-table type02")
 								table
-									caption manage Response table
 									thead
 										tr
 											th(scope="col") Text

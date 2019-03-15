@@ -8,20 +8,26 @@ html
 		link(rel="stylesheet" href="/css/style.css")
 	body
 		div#wrap
-			div.wrap-left
+			div.wrap-header
 				div._title
-					h1 Chatbot Simulator
+					h1
+						img(src="/images/logo.png")
+			div.wrap-left
 				div.sub
 					ul
 					each menu in menuList
 						ul
 						label= menu[0]
 						each sub in menu[1]
-							li
-								a(href='/mode/?domain=#{menu[0]}&subdomain=#{sub}')= sub
+							if nowPage[1] == sub
+								li.active
+									a(href='/mode/?domain=#{menu[0]}&subdomain=#{sub}')= sub
+							else
+								li
+									a(href='/mode/?domain=#{menu[0]}&subdomain=#{sub}')= sub
 			div.wrap-right
 				div.gnb
-					a(href="/mode?domain=#{nowPage[0]}&subdomain=#{nowPage[1]}" class="on") Manage Input
+					a.on(href="/mode?domain=#{nowPage[0]}&subdomain=#{nowPage[1]}") Manage Input
 					a(href="/response?domain=#{nowPage[0]}&subdomain=#{nowPage[1]}") Manage Response
 					a(href="/rule?domain=#{nowPage[0]}&subdomain=#{nowPage[1]}") Manage Rule
 				div._contents
@@ -29,7 +35,7 @@ html
 						form(action='/input?domain=#{nowPage[0]}&subdomain=#{nowPage[1]}' method='post' id='insertform')
 							div.user-input
 								label(for="la01") User Input
-								input(type="text" id="la01" name="newUserInput")
+								input#la01(type="text" name="newUserInput")
 								button(type="submit" class="button blue" value="la01" form="insertform") 추가
 									i.icon-plus 
 								button(type="submit" class="button gray" value="la01" form="deleteform") 삭제
