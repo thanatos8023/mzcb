@@ -111,6 +111,11 @@ body {
 #wrap .wrap-left .sub>ul>li:first-child{
 	margin-top:0;
 }
+
+#wrap .wrap-left .sub>ul>label{
+	color:white;
+}
+
 #wrap .wrap-left .sub>ul>li>a{
 	display:block;
 	word-break:break-all ;
