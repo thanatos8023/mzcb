@@ -16,7 +16,8 @@ html
 				div.sub(data-mcs-theme="minimal-dark")
 					ul.sub-list
 						each menu in menuList
-							li= menu[0]
+							li
+								a(href="/mode/?domain=#{menu[0]}")= menu[0]
 								ul
 									each sub in menu[1]
 										if nowPage[1] == sub
