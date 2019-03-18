@@ -18,7 +18,7 @@ html
 						each menu in menuList
 							if nowPage[0] == menu[0]
 								li.active
-									a(href="/mode/?domain=#{menu[0]}&subdomain=null)= menu[0]
+									a(href="/mode/?domain=#{menu[0]}&subdomain=null")= menu[0]
 									ul
 										each sub in menu[1]
 											if nowPage[1] == sub
