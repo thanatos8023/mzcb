@@ -13,17 +13,18 @@ html
 					h1
 						img(src="/images/logo.png")
 			div.wrap-left
-				div.sub
-					ul
+				div.sub(data-mcs-theme="minimal-dark")
+					ul.sub-list
 						each menu in menuList
-							label= menu[0]
-							each sub in menu[1]
-								if nowPage[1] == sub
-									li.active
-										a(href='/mode/?domain=#{menu[0]}&subdomain=#{sub}')= sub
-								else
-									li
-										a(href='/mode/?domain=#{menu[0]}&subdomain=#{sub}')= sub
+							li= menu[0]
+								ul
+									each sub in menu[1]
+										if nowPage[1] == sub
+											li.active
+												a(href='/mode/?domain=#{menu[0]}&subdomain=#{sub}')= sub
+										else
+											li
+												a(href='/mode/?domain=#{menu[0]}&subdomain=#{sub}')= sub
 			div.wrap-right
 				div.gnb
 					a.on(href="/mode?domain=#{nowPage[0]}&subdomain=#{nowPage[1]}") Manage Input
