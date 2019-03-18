@@ -13,17 +13,23 @@ html
 					h1
 						img(src="/images/logo.png")
 			div.wrap-left
-				div.sub
-					ul
+				div.sub(data-mcs-theme="minimal-dark")
+					ul.sub-list
 						each menu in menuList
-							label= menu[0]
-							each sub in menu[1]
-								if nowPage[1] == sub
-									li.active
-										a(href='/response?domain=#{menu[0]}&subdomain=#{sub}')= sub
-								else
-									li
-										a(href='/response?domain=#{menu[0]}&subdomain=#{sub}')= sub
+							if nowPage[0] == menu[0]
+								li.active
+									a(href="/response?domain=#{menu[0]}&subdomain=null")= menu[0]
+									ul.show(style="display: block;")
+										each sub in menu[1]
+											if nowPage[1] == sub
+												li.active
+													a(href='/response?domain=#{menu[0]}&subdomain=#{sub}')= sub
+											else
+												li
+													a(href='/response?domain=#{menu[0]}&subdomain=#{sub}')= sub
+							else
+								li
+									a(href="/response?domain=#{menu[0]}&subdomain=null")= menu[0]
 			div.wrap-right
 				div.gnb
 					a(href="/mode?domain=#{nowPage[0]}&subdomain=#{nowPage[1]}") Manage Input
