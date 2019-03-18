@@ -17,7 +17,7 @@ html
 					ul.sub-list
 						each menu in menuList
 							li
-								a(href="/mode/?domain=#{menu[0]}")= menu[0]
+								a(href="/mode/?domain=#{menu[0]}&subdomain=null")= menu[0]
 								ul
 									each sub in menu[1]
 										if nowPage[1] == sub
