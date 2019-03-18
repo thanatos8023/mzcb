@@ -19,7 +19,7 @@ html
 							if nowPage[0] == menu[0]
 								li.active
 									a(href="/mode/?domain=#{menu[0]}&subdomain=null")= menu[0]
-									ul
+									ul.show(style="display: block;")
 										each sub in menu[1]
 											if nowPage[1] == sub
 												li.active
