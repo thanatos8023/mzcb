@@ -19,7 +19,7 @@ html
 						each menu in menuList
 							if nowPage[0] == menu[0]
 								li.active
-									a(href="/rule?domain=#{menu[0]}&subdomain=null")= menu[0]
+									a(href="/rule?domain=null&subdomain=null")= menu[0]
 									ul.show(style="display: block;")
 										each sub in menu[1]
 											if nowPage[1] == sub
@@ -39,7 +39,7 @@ html
 				form(action='/updaterule?domain=#{nowPage[0]}&subdomain=#{nowPage[1]}' method='post' id='updateruleform')
 					div._contents
 						h2 Manage Rule
-						button(type="button" class="button gray2 float-right")
+						button(type="submit" class="button gray2 float-right")
 							i.icon-modify
 						div.box
 							div(class="basic-table type02")
