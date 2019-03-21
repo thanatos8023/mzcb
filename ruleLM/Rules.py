@@ -114,15 +114,16 @@ class Model(object):
             result = []
 
             splitted_nes = rulestr.split('|') # splitted_nes: ['ooo/NNN,qqq/SSS', 'aaa/DD,bbb/DE,...', ...]
-            morphlist = []
+
             for morphstr in splitted_nes:
                 splitted_morph = morphstr.split(',') # splitted_morph: ['ooo/NNN', 'qqq/SSS']
                 
+                morphlist = []
                 for morph_tag in splitted_morph:
-                    morphlist.append(tuple(morph_tag.split('/')))
+                    morphlist.append(tuple(morph_tag.strip().split('/')))
 
-            # morphlist: [('ooo', 'NNN'), ('qqq', 'SSS')]
-            result.append(set(morphlist))
+                # morphlist: [('ooo', 'NNN'), ('qqq', 'SSS')]
+                result.append(set(morphlist))
 
             # result: [{('ooo', 'NNN'), ('qqq', 'SSS')}, {('aaa', 'DD'), ('bbb', 'DE'), ...}, ...]
             return result 
