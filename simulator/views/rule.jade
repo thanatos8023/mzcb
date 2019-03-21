@@ -19,7 +19,7 @@ html
 						each menu in menuList
 							if nowPage[0] == menu[0]
 								li.active
-									a(href="/rule?domain=null&subdomain=null")= menu[0]
+									a(href="javascript:void(0);")= menu[0]
 									ul.show(style="display: block;")
 										each sub in menu[1]
 											if nowPage[1] == sub
@@ -30,7 +30,15 @@ html
 													a(href='/rule?domain=#{menu[0]}&subdomain=#{sub}')= sub
 							else
 								li
-									a(href="/rule?domain=#{menu[0]}&subdomain=null")= menu[0]
+									a(href="javascript:void(0);")= menu[0]
+									ul.show(style="display: block;")
+										each sub in menu[1]
+											if nowPage[1] == sub
+												li.active
+													a(href='/rule?domain=#{menu[0]}&subdomain=#{sub}')= sub
+											else
+												li
+													a(href='/rule?domain=#{menu[0]}&subdomain=#{sub}')= sub
 			div.wrap-right
 				div.gnb
 					a(href="/mode?domain=#{nowPage[0]}&subdomain=#{nowPage[1]}") Manage Input
