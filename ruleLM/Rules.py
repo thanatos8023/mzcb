@@ -113,13 +113,13 @@ class Model(object):
         if not rulestr is None:
             result = []
 
-            splitted_nes = rulestr.strip().split('|') # splitted_nes: ['ooo/NNN,qqq/SSS', 'aaa/DD,bbb/DE,...', ...]
+            splitted_nes = rulestr.split('|') # splitted_nes: ['ooo/NNN,qqq/SSS', 'aaa/DD,bbb/DE,...', ...]
             for morphstr in splitted_nes:
                 splitted_morph = morphstr.split(',') # splitted_morph: ['ooo/NNN', 'qqq/SSS']
 
                 morphlist = []
                 for morph_tag in splitted_morph:
-                    morphlist.append(tuple(morph_tag.split('/')))
+                    morphlist.append(tuple(morph_tag.strip().split('/')))
 
             # morphlist: [('ooo', 'NNN'), ('qqq', 'SSS')]
             result.append(set(morphlist))
