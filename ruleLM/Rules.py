@@ -246,6 +246,8 @@ class Model(object):
 
             if (matched_case == len(self.dm['Intentions'][key]['Rule'])) and matched_case:
                 # This case, the utterance is in this intention
+                print(matched_case)
+                print(self.dm['Intentions'][key]['Rule'])
                 return key
 
         return "Fail"
