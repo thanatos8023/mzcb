@@ -119,7 +119,7 @@ class Model(object):
 
                 morphlist = []
                 for morph_tag in splitted_morph:
-                    morphlist.append(tuple(morph_tag.strip().split('/')))
+                    morphlist.append(tuple(morph_tag.split('/')))
 
             # morphlist: [('ooo', 'NNN'), ('qqq', 'SSS')]
             result.append(set(morphlist))
