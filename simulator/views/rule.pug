@@ -24,10 +24,10 @@ html
 										each sub in menu[1]
 											if nowPage[1] == sub
 												li.active
-													a(href='/rule?domain=#{menu[0]}&subdomain=#{sub}')= sub
+													a(href='/rule?domain=' + menu[0] + '&subdomain=' + sub)= sub
 											else
 												li
-													a(href='/rule?domain=#{menu[0]}&subdomain=#{sub}')= sub
+													a(href='/rule?domain=' + menu[0] + '&subdomain=' + sub)= sub
 							else
 								li
 									a(href="javascript:void(0);")= menu[0]
@@ -35,16 +35,16 @@ html
 										each sub in menu[1]
 											if nowPage[1] == sub
 												li.active
-													a(href='/rule?domain=#{menu[0]}&subdomain=#{sub}')= sub
+													a(href='/rule?domain=' + menu[0] + '&subdomain=' + sub)= sub
 											else
 												li
-													a(href='/rule?domain=#{menu[0]}&subdomain=#{sub}')= sub
+													a(href='/rule?domain=' + menu[0] + '&subdomain=' + sub)= sub
 			div.wrap-right
 				div.gnb
-					a(href="/mode?domain=#{nowPage[0]}&subdomain=#{nowPage[1]}") Manage Input
-					a(href="/response?domain=#{nowPage[0]}&subdomain=#{nowPage[1]}") Manage Response
-					a.on(href="/rule?domain=#{nowPage[0]}&subdomain=#{nowPage[1]}") Manage Rule
-				form(action='/updaterule?domain=#{nowPage[0]}&subdomain=#{nowPage[1]}' method='post' id='updateruleform')
+					a(href="/mode?domain=" + nowPage[0] + "&subdomain=" + nowPage[1]) Manage Input
+					a(href="/response?domain=" + nowPage[0] + "&subdomain=" + nowPage[1]) Manage Response
+					a.on(href="/rule?domain=" + nowPage[0] + "&subdomain=" + nowPage[1]) Manage Rule
+				form(action='/updaterule?domain=' + nowPage[0] + '&subdomain=' + nowPage[1] method='post' id='updateruleform')
 					div._contents
 						h2 Manage Rule
 						button(type="submit" class="button gray2 float-right")
