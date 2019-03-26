@@ -29,7 +29,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // Setting for using jade
 app.set('views', './views');
-app.set('view engine', 'jade');
+app.set('view engine', 'pug');
 
 app.use(express.static('public/'));
 
@@ -112,7 +112,7 @@ app.get('/mode', function (req, res) {
 			}
 		}
 
-		res.render('input.jade', {
+		res.render('input', {
 			menuList: menuList,
 			uttList: uttList,
 			nowPage: [domain, subdomain]
@@ -174,7 +174,7 @@ app.get('/response', function (req, res) {
 			}
 		}
 
-		res.render('output.jade', {
+		res.render('output', {
 			menuList: menuList,
 			resText: resText,
 			nowPage: [domain, subdomain]
@@ -236,7 +236,7 @@ app.get('/rule', function (req, res) {
 			}
 		}
 
-		res.render('rule.jade', {
+		res.render('rule', {
 			menuList: menuList,
 			morph: morph,
 			nowPage: [domain, subdomain]
