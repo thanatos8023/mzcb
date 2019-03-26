@@ -4,9 +4,9 @@ const app = express();
 
 // PUG
 const pug = require('pug');
-const inputPug = pug.compileFile('./views/input.jade')
-const outputPug = pug.compileFile('./views/output.jade')
-const rulePug = pug.compileFile('./views/rule.jade')
+const inputPug = pug.compileFile('views/input.jade')
+const outputPug = pug.compileFile('views/output.jade')
+const rulePug = pug.compileFile('views/rule.jade')
 
 var oracledb = require("oracledb");
 var dbConfig = require("./dbConfig.js");
