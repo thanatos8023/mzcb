@@ -112,7 +112,7 @@ app.get('/mode', function (req, res) {
 			}
 		}
 
-		res.render('input', {
+		res.render('input.jade', {
 			menuList: menuList,
 			uttList: uttList,
 			nowPage: [domain, subdomain]
@@ -174,7 +174,7 @@ app.get('/response', function (req, res) {
 			}
 		}
 
-		res.render('output', {
+		res.render('output.jade', {
 			menuList: menuList,
 			resText: resText,
 			nowPage: [domain, subdomain]
@@ -236,7 +236,7 @@ app.get('/rule', function (req, res) {
 			}
 		}
 
-		res.render('rule', {
+		res.render('rule.jade', {
 			menuList: menuList,
 			morph: morph,
 			nowPage: [domain, subdomain]
