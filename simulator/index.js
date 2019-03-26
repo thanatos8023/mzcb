@@ -2,12 +2,6 @@
 const express = require('express');
 const app = express();
 
-// PUG
-const pug = require('pug');
-const inputPug = pug.compileFile('./views/input.pug')
-const outputPug = pug.compileFile('./views/output.pug')
-const rulePug = pug.compileFile('./views/rule.pug')
-
 var oracledb = require("oracledb");
 var dbConfig = require("./dbConfig.js");
 oracledb.autoCommit = true;
@@ -34,8 +28,8 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Setting for using jade
-//app.set('views', './views');
-//app.set('view engine', 'jade');
+app.set('views', './views');
+app.set('view engine', 'jade');
 
 app.use(express.static('public/'));
 
@@ -118,18 +112,11 @@ app.get('/mode', function (req, res) {
 			}
 		}
 
-		//res.render('input', {
-		//	menuList: menuList,
-		//	uttList: uttList,
-		//	nowPage: [domain, subdomain]
-		//});
-
-		res.send(inputPug({
+		res.render('input', {
 			menuList: menuList,
 			uttList: uttList,
 			nowPage: [domain, subdomain]
-		}));
-
+		});
 	});
 });
 
