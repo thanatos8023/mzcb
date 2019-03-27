@@ -214,7 +214,7 @@ app.get('/rule', function (req, res) {
 		// 좌측 메뉴에 전시하기 위한 객체 
 		var domainList = [];
 		for (var i = 0; i < allResult.rows.length; i++) {
-			if allResult.rows[i][0] == null: continue
+			if (allResult.rows[i][0] == null) { continue }
 			if (domainList.indexOf(allResult.rows[i][0]) < 0) {
 				domainList.push(allResult.rows[i][0]);
 			}
