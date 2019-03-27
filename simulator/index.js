@@ -89,6 +89,7 @@ app.get('/mode', function (req, res) {
 				domainList.push(allResult.rows[i][0]);
 			}
 		}
+		domainList.sort();
 
 		var menuList = [];
 		for (var i = 0; i < domainList.length; i++) {
@@ -100,6 +101,7 @@ app.get('/mode', function (req, res) {
 					temp.push(allResult.rows[j][1]);
 				}
 			}
+			temp.sort();
 			menuList.push([domainList[i], temp]);
 		}
 
@@ -152,6 +154,7 @@ app.get('/response', function (req, res) {
 				domainList.push(allResult.rows[i][0]);
 			}
 		}
+		domainList.sort();
 
 		var menuList = [];
 		for (var i = 0; i < domainList.length; i++) {
@@ -163,6 +166,7 @@ app.get('/response', function (req, res) {
 					temp.push(allResult.rows[j][1]);
 				}
 			}
+			temp.sort();
 			menuList.push([domainList[i], temp]);
 		}
 
@@ -214,6 +218,7 @@ app.get('/rule', function (req, res) {
 				domainList.push(allResult.rows[i][0]);
 			}
 		}
+		domainList.sort()
 
 		var menuList = [];
 		for (var i = 0; i < domainList.length; i++) {
@@ -225,6 +230,7 @@ app.get('/rule', function (req, res) {
 					temp.push(allResult.rows[j][1]);
 				}
 			}
+			temp.sort();
 			menuList.push([domainList[i], temp]);
 		}
 
