@@ -17,6 +17,13 @@ html
 				div.sub(data-mcs-theme="minimal-dark")
 					ul.sub-list
 						each menu in menuList
+							if nowPage[0] == menu[0]
+								li.active
+									a(href="javascript:void(0);")= menu[0]
+									ul.show(style="display: block;")
+										each sub in menu[1]
+											li
+												a(href='/mode?domain=' + menu[0] + '&subdomian=' + sub)= sub
 							li
 								a(href="javascript:void(0);")= menu[0]
 								ul.show(style="display: none;")
