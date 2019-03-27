@@ -220,7 +220,9 @@ app.get('/rule', function (req, res) {
 			}
 		}
 		domainList.sort();
-		console.log(domainList);
+		for (var i = 0; i < domainList.length; i++) {
+			console.log(domainList[i]);
+		}
 
 		var menuList = [];
 		for (var i = 0; i < domainList.length; i++) {
