@@ -219,7 +219,8 @@ app.get('/rule', function (req, res) {
 				domainList.push(allResult.rows[i][0]);
 			}
 		}
-		domainList.sort()
+		domainList.sort();
+		console.log(domainList);
 
 		var menuList = [];
 		for (var i = 0; i < domainList.length; i++) {
