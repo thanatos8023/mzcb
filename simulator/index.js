@@ -80,23 +80,20 @@ app.get('/mode', function (req, res) {
 		var intentionList = [];
 		for (var i = 0; i < lResult.rows.length; i++) {
 			if (lResult.rows[i][0] == null) { continue }
-			else {
+			if (domainList.indexOf(lResult.rows[i][0]) < 0) {
 				domainList.push(lResult.rows[i][0]);
-				subdomainList.push(lResult.rows[i][1]);
-				intentionList.push(lResult.rows[i][2]);
 			}
 		}
 
 		domainList.sort();
 
+		// Menu List
 		var menuList = [];
 		for (var i = 0; i < domainList.length; i++) {
-			// domain = domainList[i]
-			// Searching on allResult
 			var temp = [];
-			for (var j = 0; j < allResult.rows.length; j++) {
-				if (allResult.rows[j][0] === domainList[i]) {
-					temp.push(allResult.rows[j][1]);
+			for (var j = 0; j < lResult.rows.length; j++) {
+				if (lResult.rows[j][0] === domainList[i]) {
+					temp.push(lResult.rows[j][1]);
 				}
 			}
 			temp.sort();
