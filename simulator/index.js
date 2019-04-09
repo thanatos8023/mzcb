@@ -72,6 +72,8 @@ app.get('/mode', function (req, res) {
 	var sql = "select * from SEOULCB_BLOCK";
 	connection.execute(sql, function (lError, lResult, lNext) {
 		if (lError) {
+			console.error('SEOULCB_BLOCK access error');
+			console.error(lError);
 			return lError
 		}
 
