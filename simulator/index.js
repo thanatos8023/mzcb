@@ -103,7 +103,7 @@ app.get('/mode', function (req, res) {
 		}
 
 		var uttSQL = 'select * from SEOULCB_INPUTS where INTENTION = :inte';
-		connection.execute(uttSQL, intention, function (inErr, inResult, inNext) {
+		connection.execute(uttSQL, {inte: intention}, function (inErr, inResult, inNext) {
 			var uttList = [];
 			if (intention.indexOf('null') < 0) {
 				for (var i = 0; i < inResult.rows.length; i++) {
