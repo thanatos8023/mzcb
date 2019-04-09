@@ -103,20 +103,20 @@ app.get('/mode', function (req, res) {
 			menuList.push([domainList[i], temp]);
 		}
 
-		var uttList = [];
-		if (intention.indexOf('null') < 0) {
-			
-			for (var i = 0; i < allResult.rows.length; i++) {
-				if (allResult.rows[i][2] === intention) {
-					uttList.push(allResult.rows[i][3]);
+		var uttSQL = 'select * from SEOULCB_INPUTS where INTENTION = :inte';
+		connection.execute(uttSQL, intention, function (inErr, inResult, inNext) {
+			var uttList = [];
+			if (intention.indexOf('null') < 0) {
+				for (var i = 0; i < inResult.rows.length; i++) {
+					uttList.push(inResult.rows[i][3]);
 				}
 			}
-		}
 
-		res.render('input', {
-			menuList: menuList,
-			uttList: uttList,
-			nowPage: [domain, subdomain]
+			res.render('input', {
+				menuList: menuList,
+				uttList: uttList,
+				nowPage: [domain, subdomain]
+			});
 		});
 	});
 
