@@ -69,6 +69,58 @@ app.get('/mode', function (req, res) {
 
 	var intention = domain + "_" + subdomain;
 
+	var sql = "select * from SEOULCB_BLOCK";
+	connection.execute(sql, function (lError, lResult, lNext) {
+		if (lError) {
+			return lError
+		}
+
+		var domainList = [];
+		var subdomainList = [];
+		var intentionList = [];
+		for (var i = 0; i < lResult.rows.length; i++) {
+			if (lResult.rows[i][0] == null) { continue }
+			else {
+				domainList.push(lResult.rows[i][0]);
+				subdomainList.push(lResult.rows[i][1]);
+				intentionList.push(lResult.rows[i][2]);
+			}
+		}
+
+		domainList.sort();
+
+		var menuList = [];
+		for (var i = 0; i < domainList.length; i++) {
+			// domain = domainList[i]
+			// Searching on allResult
+			var temp = [];
+			for (var j = 0; j < allResult.rows.length; j++) {
+				if (allResult.rows[j][0] === domainList[i]) {
+					temp.push(allResult.rows[j][1]);
+				}
+			}
+			temp.sort();
+			menuList.push([domainList[i], temp]);
+		}
+
+		var uttList = [];
+		if (intention.indexOf('null') < 0) {
+			
+			for (var i = 0; i < allResult.rows.length; i++) {
+				if (allResult.rows[i][2] === intention) {
+					uttList.push(allResult.rows[i][3]);
+				}
+			}
+		}
+
+		res.render('input', {
+			menuList: menuList,
+			uttList: uttList,
+			nowPage: [domain, subdomain]
+		});
+	});
+
+	/*
 	var sql = "select * from SEOULCB_INPUTS";
 	connection.execute(sql, function (allError, allResult, allNext) {
 		if (allError) { // DB 불러오기 에러
@@ -123,6 +175,7 @@ app.get('/mode', function (req, res) {
 			nowPage: [domain, subdomain]
 		});
 	});
+	*/
 });
 
 // Modify Output page
