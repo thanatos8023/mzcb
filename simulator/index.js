@@ -69,6 +69,8 @@ app.get('/mode', function (req, res) {
 
 	var intention = domain + "_" + subdomain;
 
+	console.log('Domain:', domain, "subdomain:", subdomain, "intention:", intention)
+
 	/*
 	var sql = "select * from SEOULCB_BLOCK";
 	connection.execute(sql, function (lError, lResult, lNext) {
