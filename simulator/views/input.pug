@@ -14,6 +14,10 @@ html
 					h1
 						img(src="/images/logo.png")
 			div.wrap-left
+				div
+					form#newdom(action='/newdom' method='get')
+						input(type='text' name="newdom")
+						button(type='submit' form='newdom') 시나리오 추가
 				div.sub(data-mcs-theme="minimal-dark")
 					ul.sub-list
 						each menu in menuList

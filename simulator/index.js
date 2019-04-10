@@ -69,6 +69,7 @@ app.get('/mode', function (req, res) {
 
 	var intention = domain + "_" + subdomain;
 
+	/*
 	var sql = "select * from SEOULCB_BLOCK";
 	connection.execute(sql, function (lError, lResult, lNext) {
 		if (lError) {
@@ -118,8 +119,8 @@ app.get('/mode', function (req, res) {
 			});
 		});
 	});
+	*/
 
-	/*
 	var sql = "select * from SEOULCB_INPUTS";
 	connection.execute(sql, function (allError, allResult, allNext) {
 		if (allError) { // DB 불러오기 에러
@@ -174,7 +175,6 @@ app.get('/mode', function (req, res) {
 			nowPage: [domain, subdomain]
 		});
 	});
-	*/
 });
 
 // Modify Output page
