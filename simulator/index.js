@@ -50,28 +50,6 @@ function oracle_get_key (db_result, col_num) {
 	return keys
 }
 
-function oracle_counting (db_result, key_col) {
-	// DB Result form
-	// {metaData: [{name: 'ASD'}, {name: 'GDD'}, ...], rows: [[row1], [row2], ...]}
-
-	var cnt = 0;
-
-	var keys = [];
-	for (var i = 0; i < db_result.rows.length; i++) {
-		keys.push(db_result.rows[i][key_col]);
-	}
-
-	keys = Array.from(new Set(keys));
-
-	for (var i = 0; i < keys.length; i++) {
-		for (var j = 0; j < db_result.rows.length; j++) {
-			if (keys[i] === db_result.rows[j][key_col])
-		}
-	}
-
-	return cnt
-}
-
 // Monitoring page
 app.get('/view', function(req, res) {
 	var sql = "select * from SEOULCB_INFO";
