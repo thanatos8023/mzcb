@@ -94,7 +94,7 @@ app.get('/view', function(req, res) {
 				for (var k = 0; k < blcKey.length; k++) {
 					var cnt = 0
 					for (var l = 0; l < allResult.rows.length; l++) {
-						if (allResult.rows[l][5] === scenKey[j] & allResult.rows[l][6] === blcKey[k]) {
+						if (allResult.rows[l][5] === scenKey[j] & allResult.rows[l][6] === blcKey[k] & allResult.rows[l][0] === userKey[i]) {
 							cnt++;
 						}
 					}
