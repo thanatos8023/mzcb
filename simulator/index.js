@@ -39,6 +39,39 @@ app.listen(23705, function(){
 	console.log('Connected, 23705 port!');
 });
 
+function oracle_get_key (db_result, col_num) {
+	var keys = [];
+	for (var i = 0; i < db_result.rows.length; i++) {
+		keys.push(db_result.rows[i][col_num]);
+	}
+
+	keys = Array.from(new Set(keys));
+
+	return keys
+}
+
+function oracle_counting (db_result, key_col) {
+	// DB Result form
+	// {metaData: [{name: 'ASD'}, {name: 'GDD'}, ...], rows: [[row1], [row2], ...]}
+
+	var cnt = 0;
+
+	var keys = [];
+	for (var i = 0; i < db_result.rows.length; i++) {
+		keys.push(db_result.rows[i][key_col]);
+	}
+
+	keys = Array.from(new Set(keys));
+
+	for (var i = 0; i < keys.length; i++) {
+		for (var j = 0; j < db_result.rows.length; j++) {
+			if (keys[i] === db_result.rows[j][key_col])
+		}
+	}
+
+	return cnt
+}
+
 // Monitoring page
 app.get('/view', function(req, res) {
 	var sql = "select * from SEOULCB_INFO";
@@ -50,9 +83,62 @@ app.get('/view', function(req, res) {
 			return allError
 		}
 
-		console.log(allResult);
+		//console.log(allResult);
+		// 0:USER_ID, 1:USER_UTTERANCE, 2:USER_ATIME, 3:USER_NEW, 4:NLU_RESULT, 5:RES_SCENARIO, 6:RES_BLOCK, 7:RES_MESSAGE, 8:RES_TYPE
+		var userKey = oracle_get_key(allResult, 0);
+		var inputKey = oracle_get_key(allResult, 1);
+		var clsKey = oracle_get_key(allResult, 4);
+		var scenKey = oracle_get_key(allResult, 5);
+		var blcKey = oracle_get_key(allResult, 6);
 
-		res.render("analyze");
+		// Need to return
+		// 1. Scenario list, Block list, Call count
+		var scenTable = [];
+		for (var i = 0; i < scenKey.length; i++) {
+			for (var j = 0; j < blcKey.length; j++) {
+				var cnt = 0;
+				for (var k = 0; k < allResult.rows.length; k++) {
+					if (allResult.rows[k][5] === scenKey[i] & allResult.rows[k][6] === blcKey[j]) {
+						cnt++;
+					}
+				}
+
+				if (cnt > 0) {
+					scenTable.push([scenKey[i], blcKey[j], cnt]);
+				}
+			}
+		}
+
+		// 2. User ID, Scenario list, Block list, Call count
+		var userTable = [];
+		for (var i = 0; i < userKey.length; i++) {
+			for (var j = 0; j < scenKey.length; j++) {
+				for (var k = 0; k < blcKey.length; k++) {
+					var cnt = 0
+					for (var l = 0; l < allResult.rows.length; l++) {
+						if (allResult.rows[l][5] === scenKey[j] & allResult.rows[l][6] === blcKey[k]) {
+							cnt++;
+						}
+					}
+
+					if (cnt > 0) {
+						userTable.push([userKey[i], scenKey[j], blcKey[k], cnt]);
+					}
+				}
+			}
+		}
+
+		// 3. Input Utterance, NLU Result, Response Type, Response Text, Time
+		var inputTable = [];
+		for (var i = 0; i < allResult.rows.length; i++) {
+			inputTable.push([allResult.rows[i][1], allResult.rows[i][4], allResult.rows[i][8], allResult.rows[i][7], allResult.rows[i][2]]);
+		}
+		
+		res.render("analyze", {
+			table1: scenTable,
+			table2: userTable,
+			table3: inputTable
+		});
 	});
 });
 
@@ -120,7 +206,7 @@ app.get('/mode', function (req, res) {
 	*/
 
 	var sql = "select * from SEOULCB_INPUTS";
-	connection.execute(sql, function (allError, allResult, allNext) {
+	connection.execute(sql, function (allError, allResult) {
 		if (allError) { // DB 불러오기 에러
 			console.error("SERVER :: DB Connection : All Database reading connection error");
 			console.error(allError);

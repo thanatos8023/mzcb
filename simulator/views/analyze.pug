@@ -10,6 +10,13 @@ body
 				th Scenarioname
 				th Blockname
 				th Countofcall
+				th Time
+			each row in table1
+				tr
+					td= row[0]
+					td= row[1]
+					td= row[2]
+					td= row[3]
 	div
 		h2 사용자 분석
 		table(style="width:100%")
@@ -18,6 +25,14 @@ body
 				th Scinarioname
 				th Blockname
 				th Countofcall
+				th Time
+			each row in table2
+				tr
+					td= row[0]
+					td= row[1]
+					td= row[2]
+					td= row[3]
+					td= row[4]
 	div
 		h2 챗봇 현황
 		table(style="width:100%")
@@ -27,3 +42,10 @@ body
 				th Response Type
 				th Response Text
 				th Time
+			each row in table3
+				tr
+					td= row[0]
+					td= row[1]
+					td= row[2]
+					td= row[3]
+					td= row[4]
