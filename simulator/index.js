@@ -41,22 +41,18 @@ app.listen(23705, function(){
 
 // Monitoring page
 app.get('/view', function(req, res) {
-	res.send("이 기능은 추후에 구현될 예정입니다.");
-});
-
-app.post('/deleteview', function (req, res) {
-	var sql = "DELETE FROM tb_monitoring";
-	connection.query(sql, function (delErr, delResult, delField) {
-		if (delErr) {
-			console.error("SERVER :: DB Connection : tb_monitoring deletion connection error");
-			console.error(delErr);
+	var sql = "select * from SEOULCB_INFO";
+	connection.execute(sql, function (allErr, allResult, allNext) {
+		if (allErr) {
+			console.error("SERVER :: DB Connection : Information Database reading connection error");
+			console.error(allError);
 			res.end();
-			return delErr
+			return allError
 		}
 
-		console.log("SERVER :: tb_monitoring initialized");
+		console.log(allResult);
 
-		res.redirect('/view');
+		res.render("analyze");
 	});
 });
 
