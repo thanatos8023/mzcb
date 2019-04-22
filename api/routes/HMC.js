@@ -62,6 +62,36 @@ function stringframe(str) {
   return str.replace(/\s/g, "")
 }
 
+function getnow() {
+  var date = new Date();
+
+  var year = date.getFullYear();
+
+  var month = date.getMonth() + 1;
+  month = (month < 10 ? "0" : "") + month;
+
+  var day = date.getDate();
+  day = (day < 10 ? "0" : "") + day;
+
+  var hour = date.getHours();
+  hour = (hour < 10 ? "0" : "") + hour;
+
+  var min = date.getMinutes();
+  min = (min < 10 ? "0" : "") + min;
+
+  var sec = date.getSeconds();
+  sec = (sec < 10 ? "0" : "") + sec;
+
+  return year + "-" + month + "-" + day + " " + hour + ":" + min + ":" + sec
+}
+
+function isnewuser(uid) {
+  var sql = 'select * from SEOULCB_INFO where USER_ID = :id';
+  connection.execute(sql, {id: uid}, function (err, result) {
+    return (result.length === 0 ? 1 : 0)
+  });
+}
+
 router.post('/message', function (req, res, next) {
   //console.log("\n\n\n\n\n");
   //console.log(req);
@@ -78,14 +108,34 @@ router.post('/message', function (req, res, next) {
     console.log("user command : " + object.content);
     console.log("user intention: " + intention);
 
+    var nowtime = getnow();
+    var newuser = isnewuser();
+
     if (intention === 'Fail') {
-      res.json({
-        "type": "simpleText",
-        "text": "죄송합니다. 제가 잘 이해하지 못했습니다.",
-        "object1": null,
-        "object2": null,
+      //  로그 추가
+      var logSQL = 'insert into SEOULCB_INFO(USER_ID, USER_UTTERANCE, USER_ATIME, USER_NEW, NLU_RESULT, RES_SCENARIO, RES_BLOCK, RES_MESSAGE, RES_TYPE) values(:uid, :utt, :now, :new, :inte, :scen, :blc, :res_mes, :res_type)';
+      connection.execute(logSQL, {
+        uid: object.user_key,
+        utt: object.content,
+        now: nowtime,
+        new: newuser,
+        inte: intention,
+        scen: "Fail",
+        blc: "Fail", 
+        res_mes: "죄송합니다. 제가 잘 이해하지 못했습니다.",
+        res_type: "simpleText"
+      }, function (logErr, logResult) {
+        res.json({
+          "type": "simpleText",
+          "text": "죄송합니다. 제가 잘 이해하지 못했습니다.",
+          "object1": null,
+          "object2": null,
+        });
       });
     }
+
+    var scenario = intention.split('_')[0];
+    var block = intention.split('_')[1];
 
     //var resSQL = "select * from MZCB_RESPONSE where INTENTION = :inte"
     var resSQL = "select * from SEOULCB_RESPONSE where INTENTION = :inte"
@@ -98,14 +148,25 @@ router.post('/message', function (req, res, next) {
         return resError
       }
 
-      console.log(resResult.rows[0][3]);
-
-      res.json({
-        "type": "simpleText",
-        "text": resResult.rows[0][3],
-        "object1": null,
-        "object2": null,
-      });
+      var logSQL = 'insert into SEOULCB_INFO(USER_ID, USER_UTTERANCE, USER_ATIME, USER_NEW, NLU_RESULT, RES_SCENARIO, RES_BLOCK, RES_MESSAGE, RES_TYPE) values(:uid, :utt, :now, :new, :inte, :scen, :blc, :res_mes, :res_type)';
+      connection.execute(logSQL, {
+        uid: object.user_key,
+        utt: object.content,
+        now: nowtime,
+        new: newuser,
+        inte: intention,
+        scen: scenario,
+        blc: block, 
+        res_mes: resResult.rows[0][3],
+        res_type: "simpleText"
+      }, function (logErr, logResult) {
+        res.json({
+          "type": "simpleText",
+          "text": resResult.rows[0][3],
+          "object1": null,
+          "object2": null,
+        });
+      });      
     });
   });
 });

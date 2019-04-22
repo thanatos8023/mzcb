@@ -74,6 +74,7 @@ app.get('/view', function(req, res) {
 		var scenTable = [];
 		for (var i = 0; i < scenKey.length; i++) {
 			for (var j = 0; j < blcKey.length; j++) {
+				// Counting by conditions
 				var cnt = 0;
 				for (var k = 0; k < allResult.rows.length; k++) {
 					if (allResult.rows[k][5] === scenKey[i] & allResult.rows[k][6] === blcKey[j]) {
@@ -81,6 +82,7 @@ app.get('/view', function(req, res) {
 					}
 				}
 
+				// Add to result array
 				if (cnt > 0) {
 					scenTable.push([scenKey[i], blcKey[j], cnt]);
 				}
@@ -92,6 +94,7 @@ app.get('/view', function(req, res) {
 		for (var i = 0; i < userKey.length; i++) {
 			for (var j = 0; j < scenKey.length; j++) {
 				for (var k = 0; k < blcKey.length; k++) {
+					// Counting by conditions
 					var cnt = 0
 					for (var l = 0; l < allResult.rows.length; l++) {
 						if (allResult.rows[l][5] === scenKey[j] & allResult.rows[l][6] === blcKey[k] & allResult.rows[l][0] === userKey[i]) {
@@ -99,6 +102,7 @@ app.get('/view', function(req, res) {
 						}
 					}
 
+					// Add to result array
 					if (cnt > 0) {
 						userTable.push([userKey[i], scenKey[j], blcKey[k], cnt]);
 					}
