@@ -106,7 +106,7 @@ function morpheme_recommand (db_table) {
 app.get('/learn', function (req, res) {
 	var tagged = req.query.tag;
 
-	var ruleSQL = 'select * from SEOULCB_RULES';
+	var ruleSQL = 'SELECT * FROM SEOULCB_RULES';
 	connection.execute(ruleSQL, function (ruleErr, ruleRes) {
 		if (ruleErr) {
 			console.error(ruleErr);
