@@ -113,6 +113,8 @@ app.get('/learn', function (req, res) {
 			return ruleErr
 		}
 
+		console.log(ruleRes[0]);
+
 		var recommand_table = [];
 		for (var i = 0; i < ruleRes.length; i++) {
 			var temp = ruleRes[i];
