@@ -118,6 +118,11 @@ app.get('/learn', function (req, res) {
 			var temp = ruleRes[i];
 			var inputSQL = 'select * from SEOULCB_INPUTS where DOMAIN = :scen and SUBDOMAIN = :blc';
 			connection.execute(inputSQL, {scen: temp[0], blc: temp[1]}, function (inErr, inRes) {
+				if (inErr) {
+					console.error(inErr);
+					return inErr
+				}
+
 				temp.push(morpheme_recommand(inRes))
 				console.log(temp);
 				recommand_table.push(temp);
