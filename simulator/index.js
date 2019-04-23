@@ -58,7 +58,7 @@ app.get('/learn', function (req, res) {
 
 	console.log(tagged);
 
-	res.render('learn');
+	res.render('learn', {tagged: tagged});
 });
 
 // Monitoring page
@@ -522,7 +522,7 @@ app.post('/updaterule', function (req, res) {
 // Morpheme analyzer
 app.post('/analyze', function (req, res) {
 	var sent = req.body.sent;
-	console.log(sent);
+	//console.log(sent);
 
 	mecab.parse(sent, function (err, result) {
 		if (err) {
@@ -532,7 +532,7 @@ app.post('/analyze', function (req, res) {
 
 		var tagged = '';
 		for (var i = 0; i < result.length; i++) {
-			console.log(result[i]);
+			//console.log(result[i]);
 			var tag = result[i][0] + '/' + result[i][1];
 			tagged = tagged + tag + ' ';
 		}
