@@ -52,13 +52,84 @@ function oracle_get_key (db_result, col_num) {
 	return keys
 }
 
+function mecab_f (sent) {
+	mecab.parse(sent, function (err, result) {
+		var taglist = [];
+		for (var i = 0; i < result.length; i++) {
+			var tag = result[i][0] + '/' + result[i][1];
+			taglist.push(tag);
+		}
+
+		return taglist
+	});
+}
+
+function morpheme_recommand (db_table) {
+	// Recommand top 3 most frequent morphemes
+	// input db_table: USER INPUT database table
+	var wholelist = [];
+	for (var i = 0; i < db_table.length; i++) {
+		wholelist = wholelist + mecab_f(db_table[i][2]);
+	}
+
+	var m_keys = Array.from(new Set(wholelist));
+	var temp = [];
+
+	for (var i = 0; i < m_keys.length; i++) {
+		cnt = 0;
+		for (var j = 0; j < wholelist; j++) {
+			if (m_keys[i] === wholelist[j]) {
+				cnt++;
+			}
+		}
+		temp.push([m_keys, cnt]);
+	}
+
+	var result = [temp[0]];
+	for (var i = 0; i < temp; i++) {
+		if (result[0][1] < temp[i][1]) {
+			result.unshift(temp[i]);
+		} else {
+			result.push(temp[i]);
+		}
+	}
+	
+	var restr = '';
+	for (var i = 0; i < 3; i++) {
+		restr = restr + result[i][0];
+	}
+
+	return restr
+}
+
 // Learning page
 app.get('/learn', function (req, res) {
 	var tagged = req.query.tag;
 
-	console.log(tagged);
+	var ruleSQL = 'select * from SEOULCB_RULES';
+	connection.execute(ruleSQL, function (ruleErr, ruleRes) {
+		if (ruleErr) {
+			console.error(ruleErr);
+			return ruleErr
+		}
 
-	res.render('learn', {tagged: tagged});
+		var recommand_table = [];
+		for (var i = 0; i < ruleRes.length; i++) {
+			var temp = ruleRes[i];
+			var inputSQL = 'select * from SEOULCB_INPUTS where DOMAIN = :scen and SUBDOMAIN = :blc';
+			connection.execute(inputSQL, {scen: temp[0], blc: temp[1]}, function (inErr, inRes) {
+				temp.push(morpheme_recommand(inRes))
+				recommand_table.push(temp);
+			});
+		}
+
+		console.log(recommand_table);
+
+		res.render('learn', {
+			tagged: tagged,
+			rec_tab: recommand_table
+		});
+	});
 });
 
 // Monitoring page

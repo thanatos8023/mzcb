@@ -11,6 +11,15 @@ body
 			text Sentence:
 			input(type="text" name="sent" value="동해 물과 백두산이 마르고 닳도록")
 			input(type="submit" value="분석")
-		br
-		text 결과:
+		text 결과:  
 		text= tagged
+	div
+		h2 Morpheme recommandation
+		form(action='/updaterule' method='post')
+			table
+				tr
+					th Scenario
+					th Block
+					th Current
+					th Recommand
+					th New
