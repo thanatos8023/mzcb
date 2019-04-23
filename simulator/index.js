@@ -537,6 +537,6 @@ app.post('/analyze', function (req, res) {
 			tagged = tagged + tag + ' ';
 		}
 
-		res.redirect('/learn', {tag: tagged})
+		res.redirect('/learn?tag=' + tagged);
 	});
 });
