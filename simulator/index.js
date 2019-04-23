@@ -530,6 +530,8 @@ app.post('/analyze', function (req, res) {
 			return err
 		}
 
+		console.log(result);
+
 		var tagged = '';
 		for (var i = 0; i < result.length; i++) {
 			var tag = result[i][0] + '/' + result[i][1];
