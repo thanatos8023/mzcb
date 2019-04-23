@@ -50,8 +50,13 @@ function oracle_get_key (db_result, col_num) {
 	return keys
 }
 
+// Learning page
+app.get('/learn', function (req, res) {
+	res.render('learn');
+});
+
 // Monitoring page
-app.get('/view', function(req, res) {
+app.get('/view', function (req, res) {
 	var sql = "select * from SEOULCB_INFO";
 	connection.execute(sql, function (allErr, allResult, allNext) {
 		if (allErr) {
