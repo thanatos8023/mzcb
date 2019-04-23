@@ -1,6 +1,8 @@
 // Express Loading
 const express = require('express');
 const path = require('path');
+const mecab = require('mecab-ffi');
+
 const app = express();
 
 var oracledb = require("oracledb");
@@ -52,6 +54,10 @@ function oracle_get_key (db_result, col_num) {
 
 // Learning page
 app.get('/learn', function (req, res) {
+	var tagged = req.query.tag;
+
+	console.log(tagged);
+
 	res.render('learn');
 });
 
@@ -509,5 +515,27 @@ app.post('/updaterule', function (req, res) {
 
 		console.log("%%% Server log: /updaterule ROUTER :: Successfully Update [" + intention + "]  rule in DB.");
 		res.redirect('/rule?domain='+domain+'&subdomain='+subdomain);
+	});
+});
+
+
+// Morpheme analyzer
+app.post('/analyze', function (req, res) {
+	var sent = req.body.sent;
+	console.log(sent);
+
+	mecab.parse(sent, function (err, result) {
+		if (err) {
+			console.error(err);
+			return err
+		}
+
+		var tagged = [];
+		for (var i = 0; i < result.length; i++) {
+			var tag = result[i][0] + '/' + result[i][1];
+			tagged.push(tag);
+		}
+
+		res.redirect('/learn', {tag: tagged})
 	});
 });
