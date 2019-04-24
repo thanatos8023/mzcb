@@ -119,7 +119,7 @@ app.get('/learn', function (req, res) {
 		for (var i = 0; i < ruleRes.length; i++) {
 			var temp = ruleRes[i];
 			var inputSQL = 'select * from SEOULCB_INPUTS where DOMAIN = :scen and SUBDOMAIN = :blc';
-			connection.execute(inputSQL, {scen: temp[0], blc: temp[1]}, function (inErr, inRes) {
+			connection.execute(inputSQL, {scen: temp[0], blc: temp[1]}, function (inErr, inRes, inNext) {
 				if (inErr) {
 					console.error(inErr);
 					return inErr
