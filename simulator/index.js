@@ -118,23 +118,6 @@ function morpheme_recommand (db_table) {
 	return restr
 }
 
-function recommand (scenario, block) {
-	var tags;
-
-	var inputSQL = 'select * from SEOULCB_INPUTS where DOMAIN = :scen and SUBDOMIAN = :blc';
-	connection.execute(inputSQL, {scen: scenario, blc: block}, function (inErr, inRes, inNext) {
-		if (inErr) {
-			console.error(inErr);
-			return inErr
-		}
-
-		//console.log("Raw Inputs:", inRes.rows);
-
-		tags = morpheme_recommand(inRes.rows);
-	});
-
-	return tags
-}
 
 // Learning page
 app.get('/learn', function (req, res) {
@@ -147,23 +130,38 @@ app.get('/learn', function (req, res) {
 			return ruleErr
 		}
 
-		var recommand_table = [];
-		for (var i = 0; i < ruleRes.rows.length; i++) {
-			var temp = ruleRes.rows[i];
-			var tags = recommand(temp[0], temp[1]);
-			
-			console.log('After: ', tags);
-			temp.push(tags);
-			recommand_table.push(temp);
-		}
+		var inputSQL = 'select * from SEOULCB_INPUTS';
+		connection.execute(inputSQL, function (inErr, inRes, inNext) {
+			if (inErr) {
+				console.error(inErr);
+				return inErr
+			}
 
-		//console.log('Recommad table=========================================================');
-		//console.log(recommand_table);
+			var recommand_table;
 
-		res.render('learn', {
-			tagged: tagged,
-			rec_tab: recommand_table
-		});
+			for (var i = 0; i < ruleRes.rows.length; i++) {
+				var temp = [];
+				for (var j = 0; j < inRes.rows.length; j++) {
+					if (inRes.rows[j][0] === ruleRes.rows[i][0] & inRes.rows[j][1] === ruleRes.rows[i][1]) {
+						temp.push(inRes.rows[j]);
+					}
+				}
+				var tagged = morpheme_recommand(temp);
+
+				console.log(tagged);
+
+				recommand_table.push([ruleRes.rows[i][0], ruleRes.rows[i][1], ruleRes.rows[i][3], tagged]);
+			}
+
+			console.log(recommand_table[0]);
+			console.log(recommand_table[1]);
+			console.log(recommand_table[2]);
+
+			res.render('learn', {
+				tagged: tagged,
+				rec_tab: recommand_table
+			});
+		});	
 	});
 });
 
