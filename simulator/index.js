@@ -69,6 +69,8 @@ function morpheme_recommand (db_table) {
 	// input db_table: USER INPUT database table
 	var wholelist = [];
 	for (var i = 0; i < db_table.length; i++) {
+		console.log(db_table[i]);
+		console.log(db_table[i][3]);
 		wholelist = wholelist + mecab_f(db_table[i][3]);
 	}
 
@@ -132,17 +134,14 @@ app.get('/learn', function (req, res) {
 					return inErr
 				}
 
-				console.log(inRes.rows);
+				console.log("Row Inputs", inRes.rows);
 
 				var tags = morpheme_recommand(inRes.rows);
-				console.log('Result of recommandation: ', tags);
 
 				temp.push(tags);
 				recommand_table.push(temp);
 			});
 		}
-
-		console.log(recommand_table);
 
 		res.render('learn', {
 			tagged: tagged,
