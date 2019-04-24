@@ -64,8 +64,9 @@ function mecab_f (sent) {
 		}
 
 		tags = taglist;
+		console.log('anayzed:', tags);
 	});
-	console.log('anayzed:', tags);
+
 
 	return tags
 }
