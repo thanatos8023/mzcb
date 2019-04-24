@@ -74,7 +74,7 @@ function morpheme_recommand (db_table) {
 	for (var i = 0; i < db_table.length; i++) {
 		wholelist = wholelist.concat(mecab_f(db_table[i][3]));
 	}
-	console.log('wholelist: ', wholelist);
+	//console.log('wholelist: ', wholelist);
 
 	var m_keys = Array.from(new Set(wholelist));
 	var temp = [];
@@ -89,7 +89,7 @@ function morpheme_recommand (db_table) {
 		temp.push([m_keys[i], cnt]);
 	}
 
-	console.log('temp: ', temp);
+	//console.log('temp: ', temp);
 
 	var result = [temp[0]];
 	for (var i = 1; i < temp.length; i++) {
@@ -100,7 +100,7 @@ function morpheme_recommand (db_table) {
 		}
 	}
 	
-	console.log('result: ', result);
+	//console.log('result: ', result);
 
 	var restr = '';
 	if (result.length > 2) {
@@ -113,7 +113,7 @@ function morpheme_recommand (db_table) {
 		}
 	}
 	
-	console.log('Recommand morphemes: ', restr);
+	//console.log('Recommand morphemes: ', restr);
 
 	return restr
 }
@@ -140,7 +140,7 @@ app.get('/learn', function (req, res) {
 					return inErr
 				}
 
-				console.log("Raw Inputs:", inRes.rows);
+				//console.log("Raw Inputs:", inRes.rows);
 
 				var tags = morpheme_recommand(inRes.rows);
 
