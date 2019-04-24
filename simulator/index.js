@@ -109,7 +109,7 @@ function morpheme_recommand (db_table) {
 		}	
 	} else {
 		for (var i = 0; i < result.length; i++) {
-			restr = restr + result[i][0];
+			restr = restr + ' ' + result[i][0];
 		}
 	}
 	
@@ -148,6 +148,9 @@ app.get('/learn', function (req, res) {
 				recommand_table.push(temp);
 			});
 		}
+
+		console.log('Recommad table=========================================================');
+		console.log(recommand_table);
 
 		res.render('learn', {
 			tagged: tagged,
