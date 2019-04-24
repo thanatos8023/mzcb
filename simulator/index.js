@@ -106,14 +106,14 @@ function morpheme_recommand (db_table) {
 app.get('/learn', function (req, res) {
 	var tagged = req.query.tag;
 
-	var ruleSQL = 'SELECT * FROM SEOULCB_RULES';
-	connection.execute(ruleSQL, function (ruleErr, ruleRes) {
+	var ruleSQL = 'select * from SEOULCB_RULES';
+	connection.execute(ruleSQL, function (ruleErr, ruleRes, ruleNext) {
 		if (ruleErr) {
 			console.error(ruleErr);
 			return ruleErr
 		}
 
-		console.log(ruleRes[0]);
+		console.log(ruleRes);
 
 		var recommand_table = [];
 		for (var i = 0; i < ruleRes.length; i++) {
