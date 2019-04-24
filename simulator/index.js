@@ -118,6 +118,24 @@ function morpheme_recommand (db_table) {
 	return restr
 }
 
+function recommand (scenario, block) {
+	var tags;
+
+	var inputSQL = 'select * from SEOULCB_INPUTS where DOMAIN = :scen and SUBDOMIAN = :blc';
+	connection.execute(inputSQL, {scen: scenario, blc: block}, function (inErr, inRes, inNext) {
+		if (inErr) {
+			console.error(inErr);
+			return inErr
+		}
+
+		//console.log("Raw Inputs:", inRes.rows);
+
+		tags = morpheme_recommand(inRes.rows);
+	});
+
+	return tags
+}
+
 // Learning page
 app.get('/learn', function (req, res) {
 	var tagged = req.query.tag;
@@ -132,19 +150,8 @@ app.get('/learn', function (req, res) {
 		var recommand_table = [];
 		for (var i = 0; i < ruleRes.rows.length; i++) {
 			var temp = ruleRes.rows[i];
-			var tags;
-			var inputSQL = 'select * from SEOULCB_INPUTS where DOMAIN = :scen and SUBDOMIAN = :blc';
-			connection.execute(inputSQL, {scen: temp[0], blc: temp[1]}, function (inErr, inRes, inNext) {
-				if (inErr) {
-					console.error(inErr);
-					return inErr
-				}
-
-				//console.log("Raw Inputs:", inRes.rows);
-
-				tags = morpheme_recommand(inRes.rows);
-				console.log('tags: ', tags);
-			});
+			var tags = recommand(temp[0], temp[1]);
+			
 			console.log('After: ', tags);
 			temp.push(tags);
 			recommand_table.push(temp);
