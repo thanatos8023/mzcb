@@ -39,8 +39,10 @@ body
 				tr
 					each row in rec_tab
 						if row[0] == scen & row[1] == blc
-							td(name="scenario" form="updaterule")= row[0]
-							td(name="block" form="updaterule")= row[1]
+							td
+								input(type="text"  name="scenario" form="updaterule" value=row[0] disabled)
+							td
+								input(type="text"  name="block" form="updaterule" value=row[1] disabled)
 							td= row[2]
 							td= row[3]
 							td
