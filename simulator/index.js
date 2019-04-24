@@ -115,13 +115,10 @@ app.get('/learn', function (req, res) {
 			return ruleErr
 		}
 
-		console.log(ruleRes);
-		console.log('length of ruleRes:', ruleRes.length);
-
 		var recommand_table = [];
-		for (var i = 0; i < ruleRes.length; i++) {
-			var temp = ruleRes[i];
-			console.log('temp:', temp);
+		for (var i = 0; i < ruleRes.rows.length; i++) {
+			var temp = ruleRes.rows[i];
+			
 			var inputSQL = 'select * from SEOULCB_INPUTS where DOMAIN = :scen and SUBDOMAIN = :blc';
 			connection.execute(inputSQL, {scen: temp[0], blc: temp[1]}, function (inErr, inRes, inNext) {
 				if (inErr) {
@@ -129,9 +126,11 @@ app.get('/learn', function (req, res) {
 					return inErr
 				}
 
-				console.log(inRes);
 				var tags = morpheme_recommand(inRes);
 				console.log('Result of recommandation: ', tags);
+
+				temp.push(tags);
+				recommand_table.push(temp);
 			});
 		}
 
