@@ -69,10 +69,9 @@ function morpheme_recommand (db_table) {
 	// input db_table: USER INPUT database table
 	var wholelist = [];
 	for (var i = 0; i < db_table.length; i++) {
-		console.log(db_table[i]);
-		console.log(db_table[i][3]);
 		wholelist = wholelist + mecab_f(db_table[i][3]);
 	}
+	console.log('wholelist: ', wholelist);
 
 	var m_keys = Array.from(new Set(wholelist));
 	var temp = [];
@@ -87,6 +86,8 @@ function morpheme_recommand (db_table) {
 		temp.push([m_keys, cnt]);
 	}
 
+	console.log('temp: ', temp);
+
 	var result = [temp[0]];
 	for (var i = 1; i < temp; i++) {
 		if (result[0][1] < temp[i][1]) {
@@ -96,6 +97,8 @@ function morpheme_recommand (db_table) {
 		}
 	}
 	
+	console.log('result: ', result);
+
 	var restr = '';
 	if (result.length > 2) {
 		for (var i = 0; i < 3; i++) {
@@ -134,7 +137,7 @@ app.get('/learn', function (req, res) {
 					return inErr
 				}
 
-				console.log("Row Inputs", inRes.rows);
+				console.log("Raw Inputs:", inRes.rows);
 
 				var tags = morpheme_recommand(inRes.rows);
 
