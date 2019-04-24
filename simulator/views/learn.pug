@@ -10,7 +10,7 @@ body
 		form(action='/analyze' method='post')
 			text Sentence:
 			if tagged
-				input(type="text" name="sent" value="")= tagged
+				input(type="text" name="sent" value=tagged)
 			else
 				input(type="text" name="sent" value="동해물과 백두산이 마르고 닳도록")
 			input(type="submit" value="분석")
