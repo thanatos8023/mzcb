@@ -99,6 +99,8 @@ function morpheme_recommand (db_table) {
 		restr = restr + result[i][0];
 	}
 
+	console.log('Recommand morphemes: ', restr);
+
 	return restr
 }
 
@@ -113,7 +115,7 @@ app.get('/learn', function (req, res) {
 			return ruleErr
 		}
 
-		console.log(ruleRes);
+		//console.log(ruleRes);
 
 		var recommand_table = [];
 		for (var i = 0; i < ruleRes.length; i++) {
@@ -126,7 +128,7 @@ app.get('/learn', function (req, res) {
 				}
 
 				temp.push(morpheme_recommand(inRes))
-				console.log(temp);
+				//console.log(temp);
 				recommand_table.push(temp);
 			});
 		}
