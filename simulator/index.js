@@ -121,7 +121,10 @@ function morpheme_recommand (db_table) {
 
 // Learning page
 app.get('/learn', function (req, res) {
-	var tagged = req.query.tag;
+	var tag_test_result = req.query.tag;
+	var intention = req.body.inte;
+	var scenario = intention.split('_')[0];
+	var block = intention.split('_')[1];
 
 	var ruleSQL = 'select * from SEOULCB_RULES';
 	connection.execute(ruleSQL, function (ruleErr, ruleRes, ruleNext) {
@@ -155,9 +158,14 @@ app.get('/learn', function (req, res) {
 			console.log(recommand_table[1]);
 			console.log(recommand_table[2]);
 
+			var optgroup_keys = oracle_get_key(recommand_table, 0);
+
 			res.render('learn', {
-				tagged: tagged,
-				rec_tab: recommand_table
+				tagged: tag_test_result,
+				rec_tab: recommand_table,
+				opt_key: optgroup_keys,
+				scen: scenario,
+				blc: block
 			});
 		});	
 	});
