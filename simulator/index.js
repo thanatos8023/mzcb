@@ -53,7 +53,7 @@ function oracle_get_key (db_result, col_num) {
 }
 
 function mecab_f (sent) {
-	console.log('raw sent:', sent);
+	//console.log('raw sent:', sent);
 
 	var result = mecab.parseSync(sent);
 	
@@ -62,7 +62,7 @@ function mecab_f (sent) {
 		var tag = result[i][0] + '/' + result[i][1];
 		taglist.push(tag);
 	}
-	console.log('anayzed:', taglist);
+	//console.log('anayzed:', taglist);
 
 	return taglist
 }
@@ -132,7 +132,7 @@ app.get('/learn', function (req, res) {
 		var recommand_table = [];
 		for (var i = 0; i < ruleRes.rows.length; i++) {
 			var temp = ruleRes.rows[i];
-			
+			var tags;
 			var inputSQL = 'select * from SEOULCB_INPUTS where DOMAIN = :scen and SUBDOMIAN = :blc';
 			connection.execute(inputSQL, {scen: temp[0], blc: temp[1]}, function (inErr, inRes, inNext) {
 				if (inErr) {
@@ -142,11 +142,11 @@ app.get('/learn', function (req, res) {
 
 				//console.log("Raw Inputs:", inRes.rows);
 
-				var tags = morpheme_recommand(inRes.rows);
-
-				temp.push(tags);
-				recommand_table.push(temp);
+				tags = morpheme_recommand(inRes.rows);
 			});
+			console.log('After: ', tags);
+			temp.push(tags);
+			recommand_table.push(temp);
 		}
 
 		console.log('Recommad table=========================================================');
