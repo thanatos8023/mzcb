@@ -160,7 +160,7 @@ app.get('/learn', function (req, res) {
 			console.log(recommand_table[1]);
 			console.log(recommand_table[2]);
 
-			var optgroup_keys = oracle_get_key(recommand_table, 0);
+			var optgroup_keys = oracle_get_key({rows: recommand_table}, 0);
 
 			res.render('learn', {
 				tagged: tag_test_result,
