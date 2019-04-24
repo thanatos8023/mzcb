@@ -53,22 +53,18 @@ function oracle_get_key (db_result, col_num) {
 }
 
 function mecab_f (sent) {
-	var tags;
-
 	console.log('raw sent:', sent);
-	mecab.parse(sent, function (err, result) {
-		var taglist = [];
-		for (var i = 0; i < result.length; i++) {
-			var tag = result[i][0] + '/' + result[i][1];
-			taglist.push(tag);
-		}
 
-		tags = taglist;
-		console.log('anayzed:', tags);
-	});
+	var result = mecab.parseSync(sent);
+	
+	var taglist = [];
+	for (var i = 0; i < result.length; i++) {
+		var tag = result[i][0] + '/' + result[i][1];
+		taglist.push(tag);
+	}
+	console.log('anayzed:', taglist);
 
-
-	return tags
+	return taglist
 }
 
 function morpheme_recommand (db_table) {
