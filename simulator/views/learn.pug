@@ -23,3 +23,11 @@ body
 					th Current
 					th Recommand
 					th New
+				each row in rec_tab
+					tr
+						td= row[0]
+						td= row[1]
+						td= row[2]
+						td= row[3]
+						td
+							input(type='text')

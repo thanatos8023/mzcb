@@ -105,7 +105,7 @@ function morpheme_recommand (db_table) {
 	var restr = '';
 	if (result.length > 2) {
 		for (var i = 0; i < 3; i++) {
-			restr = restr + result[i][0];
+			restr = restr + '|' + result[i][0];
 		}	
 	} else {
 		for (var i = 0; i < result.length; i++) {
