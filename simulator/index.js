@@ -126,7 +126,9 @@ app.get('/learn', function (req, res) {
 					return inErr
 				}
 
-				var tags = morpheme_recommand(inRes);
+				console.log(inRes);
+
+				var tags = morpheme_recommand(inRes.rows);
 				console.log('Result of recommandation: ', tags);
 
 				temp.push(tags);
