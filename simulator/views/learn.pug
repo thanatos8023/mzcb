@@ -19,7 +19,7 @@ body
 	div
 		h2 Morpheme recommandation
 		form#viewrule(action='/learn' method='get')
-		form#updaterule(action='/updaterule' method='post')
+		form#updaterule(action='/updaterule?inte='+scen+'_'+blc method='post')
 			select(form='viewrule' name='inte')
 				each key in opt_key
 					optgroup(label=key)
@@ -39,10 +39,8 @@ body
 				tr
 					each row in rec_tab
 						if row[0] == scen & row[1] == blc
-							td
-								input(type="text"  name="scenario" form="updaterule" value=row[0] disabled)
-							td
-								input(type="text"  name="block" form="updaterule" value=row[1] disabled)
+							td= row[0]
+							td= row[1]
 							td= row[2]
 							td= row[3]
 							td

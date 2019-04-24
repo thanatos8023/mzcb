@@ -605,15 +605,12 @@ app.post('/updateres', function (req, res) {
 
 // Update rule
 app.post('/updaterule', function (req, res) {
-	var domain = req.body.scenario;
-	var subdomain = req.body.block;
-
-	var intention = domain + "_" + subdomain;
+	var intention = req.query.inte;
 
 	//console.log(req.body);
 	var newMorph = req.body.newrule;
 
-	console.log("%%% Server log: /updaterule"+intention+" ROUTER");
+	console.log("%%% Server log: /updaterule?inte="+intention+" ROUTER");
 	console.log("New Morph : " + newMorph);
 
 	//var udtSQL = "UPDATE MZCB_RULES SET  morph1 = :m1, morph2 = :m2, morph3 = :m3 WHERE intention = :inte"
