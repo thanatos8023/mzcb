@@ -20,14 +20,15 @@ body
 		h2 Morpheme recommandation
 		form#viewrule(action='/learn' method='get')
 		form#updaterule(action='/updaterule' method='post')
-			input(type='submit' form='updaterule' value='수정')
-			input(type='submit' form='viewrule' value='선택')
 			select(form='viewrule' name='inte')
 				each key in opt_key
 					optgroup(label=key)
 						each row in rec_tab
 							if row[0] == key
 								option(value=key+"_"+row[1])= row[1]
+			input(type='submit' form='viewrule' value='선택')
+			input(type='submit' form='updaterule' value='수정')
+			br
 			table
 				tr
 					th Scenario
@@ -38,9 +39,9 @@ body
 				tr
 					each row in rec_tab
 						if row[0] == scen & row[1] == blc
-							td= row[0]
-							td= row[1]
+							td(name="scenario" form="updaterule")= row[0]
+							td(name="block" form="updaterule")= row[1]
 							td= row[2]
 							td= row[3]
 							td
-								input(type="text" name="newrule")
+								input(type="text" name="newrule" form="updaterule")

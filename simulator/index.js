@@ -102,13 +102,13 @@ function morpheme_recommand (db_table) {
 	
 	//console.log('result: ', result);
 
-	var restr = '';
+	var restr = result[0][0];
 	if (result.length > 2) {
-		for (var i = 0; i < 3; i++) {
+		for (var i = 1; i < 3; i++) {
 			restr = restr + '|' + result[i][0];
 		}	
 	} else {
-		for (var i = 0; i < result.length; i++) {
+		for (var i = 1; i < result.length; i++) {
 			restr = restr + '|' + result[i][0];
 		}
 	}
@@ -605,13 +605,13 @@ app.post('/updateres', function (req, res) {
 
 // Update rule
 app.post('/updaterule', function (req, res) {
-	var domain = req.query.domain;
-	var subdomain = req.query.subdomain;
+	var domain = req.body.scenario;
+	var subdomain = req.body.block;
 
 	var intention = domain + "_" + subdomain;
 
 	//console.log(req.body);
-	var newMorph = req.body.newmorph;
+	var newMorph = req.body.newrule;
 
 	console.log("%%% Server log: /updaterule"+intention+" ROUTER");
 	console.log("New Morph : " + newMorph);
@@ -627,7 +627,7 @@ app.post('/updaterule', function (req, res) {
 		}
 
 		console.log("%%% Server log: /updaterule ROUTER :: Successfully Update [" + intention + "]  rule in DB.");
-		res.redirect('/rule?domain='+domain+'&subdomain='+subdomain);
+		res.redirect('/learn?inte='+intention);
 	});
 });
 
