@@ -109,7 +109,7 @@ function morpheme_recommand (db_table) {
 		}	
 	} else {
 		for (var i = 0; i < result.length; i++) {
-			restr = restr + ' ' + result[i][0];
+			restr = restr + '|' + result[i][0];
 		}
 	}
 	
@@ -147,8 +147,6 @@ app.get('/learn', function (req, res) {
 					}
 				}
 				var tagged = morpheme_recommand(temp);
-
-				console.log(tagged);
 
 				recommand_table.push([ruleRes.rows[i][0], ruleRes.rows[i][1], ruleRes.rows[i][3], tagged]);
 			}
