@@ -92,7 +92,7 @@ function morpheme_recommand (db_table) {
 	console.log('temp: ', temp);
 
 	var result = [temp[0]];
-	for (var i = 1; i < temp; i++) {
+	for (var i = 1; i < temp.length; i++) {
 		if (result[0][1] < temp[i][1]) {
 			result.unshift(temp[i]);
 		} else {
