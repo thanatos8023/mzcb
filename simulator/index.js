@@ -127,9 +127,9 @@ app.get('/learn', function (req, res) {
 					return inErr
 				}
 
-				temp.push(morpheme_recommand(inRes))
-				//console.log(temp);
-				recommand_table.push(temp);
+				console.log(inRes);
+				var tags = morpheme_recommand(inRes);
+				console.log('Result of recommandation: ', tags);
 			});
 		}
 
