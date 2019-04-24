@@ -86,7 +86,7 @@ function morpheme_recommand (db_table) {
 				cnt++;
 			}
 		}
-		temp.push([m_keys, cnt]);
+		temp.push([m_keys[i], cnt]);
 	}
 
 	console.log('temp: ', temp);
