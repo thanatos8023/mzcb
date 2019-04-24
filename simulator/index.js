@@ -123,8 +123,10 @@ function morpheme_recommand (db_table) {
 app.get('/learn', function (req, res) {
 	var tag_test_result = req.query.tag;
 	var intention = req.body.inte;
-	var scenario = intention.split('_')[0];
-	var block = intention.split('_')[1];
+	if (intention) {
+		var scenario = intention.split('_')[0];
+		var block = intention.split('_')[1];
+	}
 
 	var ruleSQL = 'select * from SEOULCB_RULES';
 	connection.execute(ruleSQL, function (ruleErr, ruleRes, ruleNext) {
