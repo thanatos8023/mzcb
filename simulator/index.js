@@ -137,7 +137,7 @@ app.get('/learn', function (req, res) {
 				return inErr
 			}
 
-			var recommand_table;
+			var recommand_table = [];
 
 			for (var i = 0; i < ruleRes.rows.length; i++) {
 				var temp = [];
