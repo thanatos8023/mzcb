@@ -69,7 +69,7 @@ function morpheme_recommand (db_table) {
 	// input db_table: USER INPUT database table
 	var wholelist = [];
 	for (var i = 0; i < db_table.length; i++) {
-		wholelist = wholelist + mecab_f(db_table[i][2]);
+		wholelist = wholelist + mecab_f(db_table[i][3]);
 	}
 
 	var m_keys = Array.from(new Set(wholelist));
@@ -86,7 +86,7 @@ function morpheme_recommand (db_table) {
 	}
 
 	var result = [temp[0]];
-	for (var i = 0; i < temp; i++) {
+	for (var i = 1; i < temp; i++) {
 		if (result[0][1] < temp[i][1]) {
 			result.unshift(temp[i]);
 		} else {
@@ -95,10 +95,16 @@ function morpheme_recommand (db_table) {
 	}
 	
 	var restr = '';
-	for (var i = 0; i < 3; i++) {
-		restr = restr + result[i][0];
+	if (result.length > 2) {
+		for (var i = 0; i < 3; i++) {
+			restr = restr + result[i][0];
+		}	
+	} else {
+		for (var i = 0; i < result.length; i++) {
+			restr = restr + result[i][0];
+		}
 	}
-
+	
 	console.log('Recommand morphemes: ', restr);
 
 	return restr
@@ -126,7 +132,7 @@ app.get('/learn', function (req, res) {
 					return inErr
 				}
 
-				console.log(inRes);
+				console.log(inRes.rows);
 
 				var tags = morpheme_recommand(inRes.rows);
 				console.log('Result of recommandation: ', tags);
