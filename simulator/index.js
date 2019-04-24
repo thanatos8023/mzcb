@@ -143,14 +143,15 @@ app.get('/learn', function (req, res) {
 				//console.log("Raw Inputs:", inRes.rows);
 
 				tags = morpheme_recommand(inRes.rows);
+				console.log('tags: ', tags);
 			});
 			console.log('After: ', tags);
 			temp.push(tags);
 			recommand_table.push(temp);
 		}
 
-		console.log('Recommad table=========================================================');
-		console.log(recommand_table);
+		//console.log('Recommad table=========================================================');
+		//console.log(recommand_table);
 
 		res.render('learn', {
 			tagged: tagged,
