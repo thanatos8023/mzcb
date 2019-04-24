@@ -53,6 +53,9 @@ function oracle_get_key (db_result, col_num) {
 }
 
 function mecab_f (sent) {
+	var tags;
+
+	console.log('raw sent:', sent);
 	mecab.parse(sent, function (err, result) {
 		var taglist = [];
 		for (var i = 0; i < result.length; i++) {
@@ -60,8 +63,11 @@ function mecab_f (sent) {
 			taglist.push(tag);
 		}
 
-		return taglist
+		tags = taglist;
 	});
+	console.log('anayzed:', tags);
+
+	return tags
 }
 
 function morpheme_recommand (db_table) {
