@@ -20,7 +20,8 @@ body
 		h2 Morpheme recommandation
 		form#viewrule(action='/learn' method='get')
 		form#updaterule(action='/updaterule' method='post')
-			input(type='submit' form='updaterule')
+			input(type='submit' form='updaterule' value='수정')
+			input(type='submit' form='viewrule' value='선택')
 			select(form='viewrule' name='inte')
 				each key in opt_key
 					optgroup(label=key)
