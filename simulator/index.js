@@ -115,7 +115,8 @@ app.get('/learn', function (req, res) {
 			return ruleErr
 		}
 
-		//console.log(ruleRes);
+		console.log(ruleRes);
+		console.log('length of ruleRes:', ruleRes.length);
 
 		var recommand_table = [];
 		for (var i = 0; i < ruleRes.length; i++) {
