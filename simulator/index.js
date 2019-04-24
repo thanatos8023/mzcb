@@ -122,7 +122,8 @@ function morpheme_recommand (db_table) {
 // Learning page
 app.get('/learn', function (req, res) {
 	var tag_test_result = req.query.tag;
-	var intention = req.body.inte;
+	var intention = req.query.inte;
+
 	if (intention) {
 		var scenario = intention.split('_')[0];
 		var block = intention.split('_')[1];
