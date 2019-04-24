@@ -72,7 +72,7 @@ function morpheme_recommand (db_table) {
 	// input db_table: USER INPUT database table
 	var wholelist = [];
 	for (var i = 0; i < db_table.length; i++) {
-		wholelist = wholelist + mecab_f(db_table[i][3]);
+		wholelist = wholelist.concat(mecab_f(db_table[i][3]));
 	}
 	console.log('wholelist: ', wholelist);
 
