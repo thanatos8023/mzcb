@@ -1,0 +1,20 @@
+html
+head
+	title Fallback control
+body
+	h2 Fallback control
+	table
+		tr
+			th Fail Utterance
+			th Scenario & Block
+		tr
+			td= failutt
+			td
+				form#falludt(action='/fallupdate' method='post')
+					select(form='falludt' name='inte')
+						each key in opt_key
+							optgroup(label=key)
+								each row in rec_tab
+									if row[0] == key
+										option(value=key+"_"+row[1])= row[1]
+					input(type='submit' form='updaterule' value='수정')

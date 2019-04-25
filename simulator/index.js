@@ -660,3 +660,47 @@ app.post('/analyze', function (req, res) {
 		res.redirect('/learn?tag=' + tagged);
 	});
 });
+
+
+// Fallback control page
+app.get('/fallback', function (req, res) {
+	var fallutt = req.query.utt;
+
+	var sql = 'select * from SEOULCB_RULES';
+	connection.execute(sql, function (err, result, next) {
+		if (err) {
+			console.error(err);
+			return err
+		}
+
+		var optgroup_keys = oracle_get_key(result, 0);
+
+		res.render('fallback', {
+			opt_key: optgroup_keys,
+			rec_tab: result.rows,
+			failutt: fallutt
+		});
+	});
+});
+
+
+// Fallback to Input table
+app.get('/fallupdate', function (req, res) {
+	var scenario = req.query.scen;
+	var block = req.query.blc;
+	var intention = scenario + "_" + block;
+	var fail_utt = req.query.utt;
+
+	var inSQL = "insert into SEOULCB_INPUTS(domain, subdomain, intention, utt) values(:scen, :blc, :inte, :utt)";
+	connection.execute(inSQL, {scen: scenario, blc: block, inte: intention, utt: fail_utt}, function (inErr, inRes, inNext) {
+		if (inErr) {
+			console.error(inErr);
+			return inErr
+		}
+
+		var delSQL = "delete from SEOULCB_INFO where RES_MESSAGE = :utt";
+		connection.execute(delSQL, {utt: fail_utt}, function (delErr, delRes, delNext) {
+
+		});
+	});
+})

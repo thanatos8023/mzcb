@@ -55,6 +55,6 @@ body
 			each row in falltable
 				tr
 					th
-						a(href="javascript:void()")= row[1]
+						a(href="/fallback?utt="+row[1])= row[1]
 					th= row[0]
 					th= row[2]
