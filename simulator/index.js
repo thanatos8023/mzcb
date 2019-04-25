@@ -170,6 +170,8 @@ app.get('/learn', function (req, res) {
 					return fallErr
 				}
 
+				console.log('Number of fallbacks:', fallRes.rows.length);
+
 				res.render('learn', {
 					tagged: tag_test_result,
 					rec_tab: recommand_table,
