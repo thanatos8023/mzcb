@@ -163,12 +163,21 @@ app.get('/learn', function (req, res) {
 
 			var optgroup_keys = oracle_get_key({rows: recommand_table}, 0);
 
-			res.render('learn', {
-				tagged: tag_test_result,
-				rec_tab: recommand_table,
-				opt_key: optgroup_keys,
-				scen: scenario,
-				blc: block
+			var fallSQL = 'select * from SEOULCB_INFO where RES_SCENARIO = Fail';
+			connection.execute(fallSQL, function (fallErr, fallRes, fallNext) {
+				if (fallErr) {
+					console.error(fallErr);
+					return fallErr
+				}
+
+				res.render('learn', {
+					tagged: tag_test_result,
+					rec_tab: recommand_table,
+					opt_key: optgroup_keys,
+					scen: scenario,
+					blc: block,
+					falltable: fallRes.rows
+				});
 			});
 		});	
 	});
@@ -613,7 +622,6 @@ app.post('/updaterule', function (req, res) {
 	console.log("%%% Server log: /updaterule?inte="+intention+" ROUTER");
 	console.log("New Morph : " + newMorph);
 
-	//var udtSQL = "UPDATE MZCB_RULES SET  morph1 = :m1, morph2 = :m2, morph3 = :m3 WHERE intention = :inte"
 	var udtSQL = "UPDATE SEOULCB_RULES SET  morph = :m WHERE intention = :inte"
 	connection.execute(udtSQL, {m:newMorph, inte:intention}, function (udtErr, udtResult, udtField) {
 		if (udtErr) {

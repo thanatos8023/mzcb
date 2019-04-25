@@ -45,3 +45,16 @@ body
 							td= row[3]
 							td
 								input(type="text" name="newrule" form="updaterule")
+	div
+		h2 Fallback list
+		table
+			tr
+				th Utterance
+				th User
+				th Time
+			each row in falltable
+				tr
+					th
+						a(href="javascript:void()")= row[1]
+					th= row[0]
+					th= row[2]
