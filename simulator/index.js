@@ -699,12 +699,16 @@ app.post('/fallupdate', function (req, res) {
 				return inErr
 			}
 
-			var delSQL = "delete from SEOULCB_INFO where RES_MESSAGE = :utt";
+			console.log("%% INPUT DB insertion sucessed:", fail_utt, intention)
+
+			var delSQL = "delete from seoulcb_info where res_message = :utt";
 			connection.execute(delSQL, {utt: fail_utt}, function (delErr, delRes, delNext) {
 				if (delErr) {
 					console.error(delErr);
 					return delErr
 				}
+
+				console.log("%% INFO DB deletion sucessed:", fail_utt);
 
 				res.redirect('/learn?inte='+intention);
 			});
