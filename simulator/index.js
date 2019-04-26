@@ -162,6 +162,7 @@ app.get('/learn', function (req, res) {
 			console.log(recommand_table[2]);
 
 			var optgroup_keys = oracle_get_key({rows: recommand_table}, 0);
+			optgroup_keys.sort();
 
 			var fallSQL = "SELECT * FROM SEOULCB_INFO WHERE res_scenario = 'Fail'";
 			connection.execute(fallSQL, function (fallErr, fallRes, fallNext) {
@@ -674,6 +675,7 @@ app.get('/fallback', function (req, res) {
 		}
 
 		var optgroup_keys = oracle_get_key(result, 0);
+		optgroup_keys.sort();
 
 		res.render('fallback', {
 			opt_key: optgroup_keys,
