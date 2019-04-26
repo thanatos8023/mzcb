@@ -685,7 +685,7 @@ app.get('/fallback', function (req, res) {
 
 
 // Fallback to Input table
-app.get('/fallupdate', function (req, res) {
+app.post('/fallupdate', function (req, res) {
 	var fail_utt = req.query.utt;
 	var intention = req.body.inte;
 	if (intention) {

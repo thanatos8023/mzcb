@@ -8,7 +8,7 @@ body
 			th Fail Utterance
 			th Scenario & Block
 		tr
-			form#falludt(action='/fallupdate' method='post')
+			form#falludt(action='/fallupdate?utt='+failutt method='post')
 				td
 					input(type="text" form="falludt" name="utt" value=failutt disabled)
 				td
