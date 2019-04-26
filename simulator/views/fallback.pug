@@ -8,13 +8,15 @@ body
 			th Fail Utterance
 			th Scenario & Block
 		tr
-			td= failutt
-			td
-				form#falludt(action='/fallupdate' method='post')
+			form#falludt(action='/fallupdate' method='post')
+				td
+					input(type="text" form="falludt" name="utt" value=failutt disabled)
+				td
 					select(form='falludt' name='inte')
 						each key in opt_key
 							optgroup(label=key)
 								each row in rec_tab
 									if row[0] == key
 										option(value=key+"_"+row[1])= row[1]
-					input(type='submit' form='updaterule' value='수정')
+			input(type='submit' form='updaterule' value='수정')
+	a(href="/learn") 처음으로

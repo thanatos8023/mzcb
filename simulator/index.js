@@ -686,21 +686,30 @@ app.get('/fallback', function (req, res) {
 
 // Fallback to Input table
 app.get('/fallupdate', function (req, res) {
-	var scenario = req.query.scen;
-	var block = req.query.blc;
-	var intention = scenario + "_" + block;
 	var fail_utt = req.query.utt;
+	var intention = req.body.inte;
+	if (intention) {
+		var scenario = intention.split('_')[0];
+		var block = intention.split('_')[1];
 
-	var inSQL = "insert into SEOULCB_INPUTS(domain, subdomain, intention, utt) values(:scen, :blc, :inte, :utt)";
-	connection.execute(inSQL, {scen: scenario, blc: block, inte: intention, utt: fail_utt}, function (inErr, inRes, inNext) {
-		if (inErr) {
-			console.error(inErr);
-			return inErr
-		}
+		var inSQL = "insert into SEOULCB_INPUTS(domain, subdomain, intention, utt) values(:scen, :blc, :inte, :utt)";
+		connection.execute(inSQL, {scen: scenario, blc: block, inte: intention, utt: fail_utt}, function (inErr, inRes, inNext) {
+			if (inErr) {
+				console.error(inErr);
+				return inErr
+			}
 
-		var delSQL = "delete from SEOULCB_INFO where RES_MESSAGE = :utt";
-		connection.execute(delSQL, {utt: fail_utt}, function (delErr, delRes, delNext) {
+			var delSQL = "delete from SEOULCB_INFO where RES_MESSAGE = :utt";
+			connection.execute(delSQL, {utt: fail_utt}, function (delErr, delRes, delNext) {
+				if (delErr) {
+					console.error(delErr);
+					return delErr
+				}
 
+				res.redirect('/learn?inte='+intention);
+			});
 		});
-	});
-})
+	} else {
+		res.send("Intention setting Error");
+	}
+});
