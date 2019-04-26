@@ -692,7 +692,7 @@ app.post('/fallupdate', function (req, res) {
 		var scenario = intention.split('_')[0];
 		var block = intention.split('_')[1];
 
-		var inSQL = "insert into SEOULCB_INPUTS(domain, subdomain, intention, utt) values(:scen, :blc, :inte, :utt)";
+		var inSQL = "insert into SEOULCB_INPUTS(domain, subdomian, intention, utt) values(:scen, :blc, :inte, :utt)";
 		connection.execute(inSQL, {scen: scenario, blc: block, inte: intention, utt: fail_utt}, function (inErr, inRes, inNext) {
 			if (inErr) {
 				console.error(inErr);
