@@ -701,7 +701,7 @@ app.post('/fallupdate', function (req, res) {
 
 			console.log("%% INPUT DB insertion sucessed:", fail_utt, intention)
 
-			var delSQL = "delete from seoulcb_info where res_message = :utt";
+			var delSQL = "delete from seoulcb_info where user_utterance = :utt";
 			connection.execute(delSQL, {utt: fail_utt}, function (delErr, delRes, delNext) {
 				if (delErr) {
 					console.error(delErr);
